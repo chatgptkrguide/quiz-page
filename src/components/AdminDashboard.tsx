@@ -53,7 +53,7 @@ export default function AdminDashboard({
   }, [fetchResults]);
 
   const copyLink = async (slug: string) => {
-    const url = `${window.location.origin}/${encodeURIComponent(slug)}`;
+    const url = `${window.location.origin}/${slug}`;
     await navigator.clipboard.writeText(url);
     setCopiedSlug(slug);
     setTimeout(() => setCopiedSlug(null), 2000);
