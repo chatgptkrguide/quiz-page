@@ -73,18 +73,18 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="py-4 px-6 border-b border-border/50">
-        <div className="flex items-center justify-center gap-3">
-          <p className="text-sm text-muted text-center font-serif tracking-wide">
+      <header className="py-4 px-6 border-b border-border/40">
+        <div className="flex items-center justify-center gap-2.5">
+          <p className="text-[14px] text-foreground/50 text-center">
             {quiz.title}
           </p>
           {phase === "quiz" && (
-            <span className="text-[10px] text-accent bg-accent-light/40 px-2 py-0.5 rounded">
+            <span className="text-[11px] text-accent bg-accent/10 px-2 py-0.5 rounded font-medium">
               퀴즈
             </span>
           )}
           {phase === "lesson" && (
-            <span className="text-[10px] text-muted bg-border/50 px-2 py-0.5 rounded">
+            <span className="text-[11px] text-foreground/35 bg-foreground/5 px-2 py-0.5 rounded">
               설명
             </span>
           )}

@@ -26,7 +26,7 @@ export default function NameInput({
   };
 
   return (
-    <div className="min-h-[75vh] flex items-center justify-center px-4">
+    <div className="min-h-[75vh] flex items-center justify-center px-5">
       <div className="w-full max-w-sm animate-fade-in">
         <div className="mb-10">
           {quizLogo && (
@@ -38,10 +38,10 @@ export default function NameInput({
               className="mb-5 rounded-lg"
             />
           )}
-          <h1 className="text-2xl font-bold leading-snug mb-2">
+          <h1 className="text-[22px] font-bold leading-snug mb-3">
             {quizTitle}
           </h1>
-          <p className="text-muted text-sm leading-relaxed max-w-[280px]">
+          <p className="text-[15px] text-foreground/60 leading-relaxed">
             {quizDescription}
           </p>
         </div>
@@ -50,9 +50,9 @@ export default function NameInput({
           <div>
             <label
               htmlFor="name"
-              className="block text-xs font-medium text-muted mb-2 tracking-wide"
+              className="block text-[13px] font-medium text-foreground/50 mb-2"
             >
-              이름
+              이름을 입력해주세요
             </label>
             <input
               id="name"
@@ -60,7 +60,7 @@ export default function NameInput({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="홍길동"
-              className="w-full px-4 py-3 rounded-lg border-2 border-border bg-surface text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all"
+              className="w-full px-4 py-3.5 rounded-lg border-2 border-border bg-surface text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all text-[15px]"
               autoFocus
               maxLength={20}
             />
@@ -68,14 +68,14 @@ export default function NameInput({
           <button
             type="submit"
             disabled={!name.trim()}
-            className="w-full py-3.5 rounded-lg bg-foreground text-background font-medium hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
+            className="w-full py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 disabled:opacity-20 disabled:cursor-not-allowed transition-opacity"
           >
-            시작
+            설명 읽기
           </button>
         </form>
 
-        <p className="text-[11px] text-muted/50 mt-8">
-          설명을 먼저 읽고, 퀴즈로 확인합니다
+        <p className="text-[12px] text-foreground/30 mt-8">
+          설명을 읽은 뒤, 퀴즈로 확인합니다
         </p>
       </div>
     </div>

@@ -32,30 +32,30 @@ export default function QuizResult({
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto text-center animate-fade-in">
-      <div className="mb-8">
-        <p className="text-sm text-muted mb-2 font-serif">{name}님</p>
-        <h2 className="text-2xl font-bold mb-1.5">
+    <div className="w-full max-w-sm mx-auto animate-fade-in px-1">
+      <div className="text-center mb-10">
+        <p className="text-[13px] text-foreground/40 mb-3">{name}님의 결과</p>
+        <h2 className="text-[24px] font-bold mb-2">
           <span className="accent-underline">전 문제 통과</span>
         </h2>
-        <p className="text-muted text-sm mt-3">
-          {totalQuestions}문제를 모두 맞혔습니다
+        <p className="text-[15px] text-foreground/50 mt-4">
+          {totalQuestions}문제를 모두 맞혔습니다.
         </p>
       </div>
 
-      <div className="bg-surface rounded-xl border border-border p-5 mb-7">
-        <div className="flex items-center justify-center gap-6">
-          <div>
-            <p className="text-3xl font-bold font-serif text-accent">
+      <div className="bg-surface rounded-xl border border-border p-6 mb-8">
+        <div className="flex items-center justify-center gap-8">
+          <div className="text-center">
+            <p className="text-[28px] font-bold text-accent">
               {totalQuestions}
-              <span className="text-base text-muted">/{totalQuestions}</span>
+              <span className="text-[16px] text-foreground/30 font-normal">/{totalQuestions}</span>
             </p>
-            <p className="text-[11px] text-muted mt-1">정답 수</p>
+            <p className="text-[12px] text-foreground/35 mt-1">정답 수</p>
           </div>
           <div className="w-px h-10 bg-border" />
-          <div>
-            <p className="text-3xl font-bold font-serif text-accent">100%</p>
-            <p className="text-[11px] text-muted mt-1">정답률</p>
+          <div className="text-center">
+            <p className="text-[28px] font-bold text-accent">100%</p>
+            <p className="text-[12px] text-foreground/35 mt-1">정답률</p>
           </div>
         </div>
       </div>
@@ -63,15 +63,15 @@ export default function QuizResult({
       <div className="space-y-3">
         <button
           onClick={handleShare}
-          className="w-full py-3.5 rounded-lg bg-foreground text-background font-medium hover:opacity-90 transition-opacity"
+          className="w-full py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 transition-opacity"
         >
           결과 공유하기
         </button>
         <button
           onClick={onRetry}
-          className="w-full py-3 text-sm text-muted hover:text-foreground transition-colors"
+          className="w-full py-3.5 rounded-lg text-[14px] text-foreground/40 hover:text-foreground transition-colors"
         >
-          다시 풀기
+          처음부터 다시 하기
         </button>
       </div>
     </div>
