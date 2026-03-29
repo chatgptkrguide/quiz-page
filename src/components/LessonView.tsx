@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useState } from "react";
 import { LessonSection } from "@/types/quiz";
 
 interface LessonViewProps {
@@ -12,82 +12,116 @@ interface LessonViewProps {
 
 export default function LessonView({
   lessons,
-  quizTitle,
   totalQuestions,
   onStartQuiz,
 }: LessonViewProps) {
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const [scrolledToBottom, setScrolledToBottom] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const isLast = current >= lessons.length;
+  const lesson = lessons[current];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setScrolledToBottom(true);
-      },
-      { threshold: 0.5 }
-    );
-    if (bottomRef.current) observer.observe(bottomRef.current);
-    return () => observer.disconnect();
-  }, []);
+  const handleNext = () => {
+    setCurrent((prev) => prev + 1);
+  };
+
+  const handlePrev = () => {
+    setCurrent((prev) => Math.max(0, prev - 1));
+  };
 
   return (
-    <div className="min-h-screen">
-      {/* lessons */}
-      <div className="max-w-lg mx-auto px-5 py-10 space-y-12">
-        {lessons.map((lesson, i) => (
-          <section
-            key={lesson.id}
-            className="animate-fade-in"
-            style={{ animationDelay: `${i * 80}ms`, opacity: 0 }}
-          >
-            <div className="flex items-baseline gap-2.5 mb-3">
-              <span className="text-accent font-serif text-xs font-bold">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h2 className="text-base font-bold leading-snug">
+    <div className="min-h-screen flex flex-col">
+      {/* progress bar */}
+      <div className="w-full h-0.5 bg-border">
+        <div
+          className="h-full bg-accent transition-all duration-500 ease-out"
+          style={{
+            width: `${((current + 1) / (lessons.length + 1)) * 100}%`,
+          }}
+        />
+      </div>
+
+      <div className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-lg">
+          {!isLast && lesson ? (
+            <div key={lesson.id} className="animate-fade-in">
+              {/* counter */}
+              <div className="flex items-center gap-2 mb-6">
+                <span className="text-accent font-serif text-sm font-bold">
+                  {String(current + 1).padStart(2, "0")}
+                </span>
+                <span className="text-[11px] text-muted">
+                  / {String(lessons.length).padStart(2, "0")}
+                </span>
+              </div>
+
+              {/* title */}
+              <h2 className="text-xl font-bold leading-snug mb-5">
                 {lesson.title}
               </h2>
-            </div>
-            <p className="text-sm text-muted leading-[1.8] pl-7">
-              {lesson.content}
-            </p>
-            {lesson.highlight && (
-              <div className="mt-3 ml-7 px-3 py-2 bg-accent-light/40 border-l-3 border-accent rounded-r-md">
-                <p className="text-xs font-medium text-accent">
-                  {lesson.highlight}
-                </p>
-              </div>
-            )}
-          </section>
-        ))}
 
-        {/* bottom CTA */}
-        <div ref={bottomRef} className="pt-6 pb-4">
-          <div className="border-t border-border pt-8">
-            <p className="text-xs text-muted mb-1 font-serif">
-              내용을 잘 읽으셨나요?
-            </p>
-            <p className="text-sm text-muted mb-6">
-              이제 {totalQuestions}개의 문제로 확인해볼게요.
-              <br />
-              <span className="text-xs text-muted/60">
-                모든 문제를 맞혀야 통과할 수 있어요.
-              </span>
-            </p>
-            <button
-              onClick={onStartQuiz}
-              className={`w-full py-3.5 rounded-lg font-medium transition-all ${
-                scrolledToBottom
-                  ? "bg-foreground text-background hover:opacity-90"
-                  : "bg-border text-muted cursor-default"
-              }`}
-              disabled={!scrolledToBottom}
-            >
-              {scrolledToBottom
-                ? `${quizTitle} 시작`
-                : "아래까지 읽어주세요"}
-            </button>
-          </div>
+              {/* content */}
+              <div className="text-sm text-muted leading-[1.9] mb-6 whitespace-pre-line">
+                {lesson.content}
+              </div>
+
+              {/* highlight */}
+              {lesson.highlight && (
+                <div className="px-4 py-3 bg-accent-light/30 border-l-3 border-accent rounded-r-md mb-8">
+                  <p className="text-sm font-semibold text-accent leading-relaxed">
+                    {lesson.highlight}
+                  </p>
+                </div>
+              )}
+
+              {/* nav */}
+              <div className="flex gap-3 mt-10">
+                {current > 0 && (
+                  <button
+                    onClick={handlePrev}
+                    className="px-5 py-3 text-sm text-muted hover:text-foreground transition-colors"
+                  >
+                    이전
+                  </button>
+                )}
+                <button
+                  onClick={handleNext}
+                  className="flex-1 py-3.5 rounded-lg bg-foreground text-background font-medium hover:opacity-90 transition-opacity"
+                >
+                  {current < lessons.length - 1 ? "다음" : "설명 완료"}
+                </button>
+              </div>
+            </div>
+          ) : (
+            /* quiz start prompt */
+            <div className="animate-fade-in text-center">
+              <p className="text-xs text-muted mb-2 font-serif">
+                내용을 모두 읽었습니다
+              </p>
+              <h2 className="text-xl font-bold mb-3">
+                퀴즈로 확인해볼까요?
+              </h2>
+              <p className="text-sm text-muted mb-8">
+                {totalQuestions}개의 문제가 있어요.
+                <br />
+                <span className="text-xs text-muted/60">
+                  모든 문제를 맞혀야 통과할 수 있습니다.
+                </span>
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={handlePrev}
+                  className="px-5 py-3 text-sm text-muted hover:text-foreground transition-colors"
+                >
+                  다시 읽기
+                </button>
+                <button
+                  onClick={onStartQuiz}
+                  className="flex-1 py-3.5 rounded-lg bg-foreground text-background font-medium hover:opacity-90 transition-opacity"
+                >
+                  퀴즈 시작
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
