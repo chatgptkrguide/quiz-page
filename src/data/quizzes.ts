@@ -3,9 +3,9 @@ import { Quiz } from "@/types/quiz";
 export const quizzes: Quiz[] = [
   {
     slug: "식단하조",
-    title: "식단하조 이해도 테스트",
+    title: "식단하조 조모임 상세 설명",
     description:
-      "먹는 걸 기록하면, 몸이 달라진다. 식단하조 모임을 잘 이해했는지 확인해보세요.",
+      "먹는 걸 기록하면, 몸이 달라진다. 설명을 읽고 퀴즈로 확인해보세요.",
     logo: "",
     color: "#4ade80",
     lessons: [
@@ -191,9 +191,9 @@ export const quizzes: Quiz[] = [
   },
   {
     slug: "AI써보조",
-    title: "AI 써보조 이해도 테스트",
+    title: "AI 써보조 조모임 상세 설명",
     description:
-      "직접 써보고, 진짜 내 것으로 만들자. AI 써보조 모임 내용을 잘 이해했는지 확인해보세요.",
+      "직접 써보고, 진짜 내 것으로 만들자. 설명을 읽고 퀴즈로 확인해보세요.",
     logo: "",
     color: "#818cf8",
     lessons: [
