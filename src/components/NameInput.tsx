@@ -25,25 +25,25 @@ export default function NameInput({
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4">
-      <div className="w-full max-w-md animate-fade-in">
-        <div className="text-center mb-8">
-          <span className="text-6xl block mb-4">{quizEmoji}</span>
-          <h1 className="text-2xl font-bold text-stone-900 mb-2">
+    <div className="min-h-[75vh] flex items-center justify-center px-4">
+      <div className="w-full max-w-sm animate-fade-in">
+        <div className="mb-10">
+          <span className="text-5xl block mb-5">{quizEmoji}</span>
+          <h1 className="text-2xl font-bold leading-snug mb-2">
             {quizTitle}
           </h1>
-          <p className="text-stone-500 text-sm leading-relaxed">
+          <p className="text-muted text-sm leading-relaxed max-w-[280px]">
             {quizDescription}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-stone-700 mb-1.5"
+              className="block text-xs font-medium text-muted mb-2 tracking-wide"
             >
-              이름을 입력해주세요
+              이름
             </label>
             <input
               id="name"
@@ -51,7 +51,7 @@ export default function NameInput({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="홍길동"
-              className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all"
+              className="w-full px-4 py-3 rounded-lg border-2 border-border bg-surface text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all"
               autoFocus
               maxLength={20}
             />
@@ -59,14 +59,14 @@ export default function NameInput({
           <button
             type="submit"
             disabled={!name.trim()}
-            className="w-full py-3 rounded-xl bg-stone-900 text-white font-medium hover:bg-stone-800 disabled:bg-stone-300 disabled:cursor-not-allowed transition-colors"
+            className="w-full py-3.5 rounded-lg bg-foreground text-background font-medium hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
           >
-            테스트 시작하기
+            시작
           </button>
         </form>
 
-        <p className="text-center text-xs text-stone-400 mt-6">
-          총 문제 수와 소요 시간은 테스트마다 다릅니다
+        <p className="text-[11px] text-muted/50 mt-8">
+          모든 문제를 맞혀야 통과할 수 있습니다. 틀리면 다시 풀어요.
         </p>
       </div>
     </div>

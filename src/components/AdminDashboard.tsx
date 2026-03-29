@@ -69,75 +69,79 @@ export default function AdminDashboard({
     : results;
 
   return (
-    <div className="min-h-screen bg-stone-50">
-      <header className="bg-white border-b border-stone-200 px-6 py-5">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-xl font-bold text-stone-900">퀴즈 관리</h1>
-          <p className="text-sm text-stone-400 mt-1">
-            테스트 링크를 복사하고 응시 결과를 확인하세요
+    <div className="min-h-screen">
+      {/* Header - 비대칭 레이아웃 */}
+      <header className="border-b border-border px-6 py-6">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-lg font-bold">퀴즈 관리</h1>
+          <p className="text-xs text-muted mt-0.5">
+            링크 복사, 응시 결과 확인
           </p>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-        {/* Quiz Links */}
+      <main className="max-w-3xl mx-auto px-4 py-8 space-y-10">
+        {/* Quiz Links - 다양한 카드 크기 */}
         <section>
-          <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-3">
+          <h2 className="text-xs font-medium text-muted mb-4 tracking-wide">
             테스트 링크
           </h2>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {quizzes.map((quiz) => (
+          <div className="space-y-2">
+            {quizzes.map((quiz, i) => (
               <div
                 key={quiz.slug}
-                className="bg-white rounded-xl border border-stone-200 p-4 flex items-center justify-between"
+                className={`bg-surface rounded-lg border border-border p-4 flex items-center justify-between ${
+                  i === 0 ? "pl-5 border-l-3 border-l-accent" : ""
+                }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className="text-2xl shrink-0">{quiz.emoji}</span>
+                  <span className="text-xl shrink-0">{quiz.emoji}</span>
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-stone-900 truncate">
+                    <p className="text-sm font-medium truncate">
                       {quiz.title}
                     </p>
-                    <p className="text-xs text-stone-400">
-                      {quiz.questions.length}문제
+                    <p className="text-[11px] text-muted">
+                      {quiz.questions.length}문제 · 전 문제 정답 필요
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => copyLink(quiz.slug)}
-                  className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`shrink-0 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                     copiedSlug === quiz.slug
                       ? "bg-emerald-100 text-emerald-700"
-                      : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+                      : "border border-border text-muted hover:text-foreground hover:border-muted"
                   }`}
                 >
-                  {copiedSlug === quiz.slug ? "복사됨!" : "링크 복사"}
+                  {copiedSlug === quiz.slug ? "복사됨" : "링크 복사"}
                 </button>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Filter */}
+        {/* Results */}
         <section>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wider">
+          <div className="flex items-end justify-between mb-4">
+            <h2 className="text-xs font-medium text-muted tracking-wide">
               응시 결과
             </h2>
             <button
               onClick={fetchResults}
-              className="text-xs text-stone-400 hover:text-stone-600 transition-colors"
+              className="text-[11px] text-muted/60 hover:text-muted transition-colors"
             >
               새로고침
             </button>
           </div>
 
-          <div className="flex gap-2 mb-4 flex-wrap">
+          {/* Filter chips */}
+          <div className="flex gap-1.5 mb-5 flex-wrap">
             <button
               onClick={() => setSelectedSlug(null)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+              className={`px-3 py-1 rounded-md text-xs transition-all ${
                 selectedSlug === null
-                  ? "bg-stone-900 text-white"
-                  : "bg-white text-stone-500 border border-stone-200 hover:border-stone-300"
+                  ? "bg-foreground text-background"
+                  : "text-muted hover:text-foreground"
               }`}
             >
               전체
@@ -146,10 +150,10 @@ export default function AdminDashboard({
               <button
                 key={quiz.slug}
                 onClick={() => setSelectedSlug(quiz.slug)}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                className={`px-3 py-1 rounded-md text-xs transition-all ${
                   selectedSlug === quiz.slug
-                    ? "bg-stone-900 text-white"
-                    : "bg-white text-stone-500 border border-stone-200 hover:border-stone-300"
+                    ? "bg-foreground text-background"
+                    : "text-muted hover:text-foreground"
                 }`}
               >
                 {quiz.emoji} {quiz.slug}
@@ -157,73 +161,52 @@ export default function AdminDashboard({
             ))}
           </div>
 
-          {/* Results Table */}
+          {/* Results */}
           {loading ? (
-            <div className="text-center py-12 text-stone-400 text-sm">
-              로딩 중...
-            </div>
+            <p className="text-xs text-muted py-8 text-center">로딩 중...</p>
           ) : filteredResults.length === 0 ? (
-            <div className="bg-white rounded-xl border border-stone-200 p-12 text-center">
-              <p className="text-stone-400 text-sm">아직 응시 결과가 없습니다</p>
+            <div className="border border-dashed border-border rounded-lg py-12 text-center">
+              <p className="text-sm text-muted">아직 응시 결과가 없습니다</p>
             </div>
           ) : (
-            <div className="bg-white rounded-xl border border-stone-200 overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-stone-100 bg-stone-50">
-                      <th className="text-left px-4 py-3 text-stone-500 font-medium">
-                        이름
-                      </th>
-                      <th className="text-left px-4 py-3 text-stone-500 font-medium">
-                        테스트
-                      </th>
-                      <th className="text-center px-4 py-3 text-stone-500 font-medium">
-                        점수
-                      </th>
-                      <th className="text-center px-4 py-3 text-stone-500 font-medium">
-                        결과
-                      </th>
-                      <th className="text-right px-4 py-3 text-stone-500 font-medium">
-                        응시일
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredResults.map((r) => (
-                      <tr
-                        key={r.id}
-                        className="border-b border-stone-50 last:border-0"
-                      >
-                        <td className="px-4 py-3 font-medium text-stone-900">
-                          {r.name}
-                        </td>
-                        <td className="px-4 py-3 text-stone-500">{r.slug}</td>
-                        <td className="px-4 py-3 text-center text-stone-700">
-                          {r.score}/{r.totalQuestions}{" "}
-                          <span className="text-stone-400">
-                            ({r.percentage}%)
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <span
-                            className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
-                              r.passed
-                                ? "bg-emerald-100 text-emerald-700"
-                                : "bg-red-100 text-red-600"
-                            }`}
-                          >
-                            {r.passed ? "통과" : "미통과"}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-right text-stone-400 text-xs">
-                          {formatDate(r.submittedAt)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+            <div className="space-y-1.5">
+              {filteredResults.map((r) => (
+                <div
+                  key={r.id}
+                  className="bg-surface border border-border rounded-lg px-4 py-3 flex items-center justify-between gap-3"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                        r.passed ? "bg-emerald-500" : "bg-red-400"
+                      }`}
+                    />
+                    <span className="text-sm font-medium truncate">
+                      {r.name}
+                    </span>
+                    <span className="text-[11px] text-muted shrink-0">
+                      {r.slug}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className="text-xs text-muted">
+                      {r.score}/{r.totalQuestions}
+                    </span>
+                    <span
+                      className={`text-[11px] font-medium px-2 py-0.5 rounded ${
+                        r.passed
+                          ? "bg-emerald-50 text-emerald-700"
+                          : "bg-red-50 text-red-500"
+                      }`}
+                    >
+                      {r.passed ? "통과" : "미통과"}
+                    </span>
+                    <span className="text-[11px] text-muted/50 w-16 text-right">
+                      {formatDate(r.submittedAt)}
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </section>

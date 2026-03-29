@@ -1,37 +1,22 @@
 "use client";
 
-import { Quiz, QuizResult as QuizResultType } from "@/types/quiz";
+import { Quiz } from "@/types/quiz";
 
 interface QuizResultProps {
   quiz: Quiz;
   name: string;
-  score: number;
   totalQuestions: number;
   onRetry: () => void;
-}
-
-const PASS_THRESHOLD = 60;
-
-function getResult(results: QuizResultType[], score: number): QuizResultType {
-  return (
-    results.find((r) => score >= r.minScore && score <= r.maxScore) ??
-    results[results.length - 1]
-  );
 }
 
 export default function QuizResult({
   quiz,
   name,
-  score,
   totalQuestions,
   onRetry,
 }: QuizResultProps) {
-  const result = getResult(quiz.results, score);
-  const percentage = Math.round((score / totalQuestions) * 100);
-  const passed = percentage >= PASS_THRESHOLD;
-
   const handleShare = async () => {
-    const text = `[${quiz.title}]\n${name}님의 결과: ${result.emoji} ${result.title}\n${score}/${totalQuestions}문제 정답 (${percentage}%)\n${passed ? "✅ 통과!" : "❌ 미통과"}\n\n나도 테스트하기 👉 ${window.location.href}`;
+    const text = `[${quiz.title}] ${name}님이 전 문��를 통과했습니다!\n${totalQuestions}문제 모두 정답\n\n나도 도전하기 👉 ${window.location.href}`;
 
     if (navigator.share) {
       try {
@@ -47,44 +32,33 @@ export default function QuizResult({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto text-center animate-fade-in">
-      <div className="mb-6">
-        <span className="text-7xl block mb-4 animate-slide-up">
-          {result.emoji}
+    <div className="w-full max-w-sm mx-auto text-center animate-fade-in">
+      <div className="mb-8">
+        <span className="text-6xl block mb-5 animate-slide-up">
+          🎉
         </span>
-        <p className="text-sm text-stone-400 mb-1">{name}님의 결과</p>
-        <h2 className="text-2xl font-bold text-stone-900 mb-2">
-          {result.title}
+        <p className="text-sm text-muted mb-2 font-serif">{name}님</p>
+        <h2 className="text-2xl font-bold mb-1.5">
+          <span className="accent-underline">전 문제 통과!</span>
         </h2>
-        <p className="text-stone-500 text-sm leading-relaxed">
-          {result.description}
+        <p className="text-muted text-sm mt-3">
+          {totalQuestions}문제를 모두 맞혔습니다
         </p>
       </div>
 
-      {/* Pass/Fail Badge */}
-      <div
-        className={`inline-block px-5 py-2 rounded-full text-sm font-semibold mb-6 ${
-          passed
-            ? "bg-emerald-100 text-emerald-700"
-            : "bg-red-100 text-red-600"
-        }`}
-      >
-        {passed ? "✅ 통과" : "❌ 미통과"} (기준: {PASS_THRESHOLD}%)
-      </div>
-
-      <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
-        <div className="flex items-center justify-center gap-8">
+      <div className="bg-surface rounded-xl border border-border p-5 mb-7">
+        <div className="flex items-center justify-center gap-6">
           <div>
-            <p className="text-3xl font-bold text-stone-900">
-              {score}
-              <span className="text-lg text-stone-400">/{totalQuestions}</span>
+            <p className="text-3xl font-bold font-serif text-accent">
+              {totalQuestions}
+              <span className="text-base text-muted">/{totalQuestions}</span>
             </p>
-            <p className="text-xs text-stone-400 mt-1">정답 수</p>
+            <p className="text-[11px] text-muted mt-1">정답 수</p>
           </div>
-          <div className="w-px h-12 bg-stone-200" />
+          <div className="w-px h-10 bg-border" />
           <div>
-            <p className="text-3xl font-bold text-stone-900">{percentage}%</p>
-            <p className="text-xs text-stone-400 mt-1">정답률</p>
+            <p className="text-3xl font-bold font-serif text-accent">100%</p>
+            <p className="text-[11px] text-muted mt-1">정답률</p>
           </div>
         </div>
       </div>
@@ -92,13 +66,13 @@ export default function QuizResult({
       <div className="space-y-3">
         <button
           onClick={handleShare}
-          className="w-full py-3 rounded-xl bg-stone-900 text-white font-medium hover:bg-stone-800 transition-colors"
+          className="w-full py-3.5 rounded-lg bg-foreground text-background font-medium hover:opacity-90 transition-opacity"
         >
           결과 공유하기
         </button>
         <button
           onClick={onRetry}
-          className="w-full py-3 rounded-xl border-2 border-stone-200 text-stone-700 font-medium hover:border-stone-400 transition-colors"
+          className="w-full py-3 text-sm text-muted hover:text-foreground transition-colors"
         >
           다시 풀기
         </button>

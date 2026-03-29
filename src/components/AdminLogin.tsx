@@ -18,12 +18,11 @@ export default function AdminLogin({ onLogin, error }: AdminLoginProps) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-stone-50">
-      <div className="w-full max-w-sm animate-fade-in">
-        <div className="text-center mb-8">
-          <span className="text-4xl block mb-3">🔐</span>
-          <h1 className="text-xl font-bold text-stone-900">관리자 로그인</h1>
-          <p className="text-sm text-stone-400 mt-1">
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-xs animate-fade-in">
+        <div className="mb-8">
+          <h1 className="text-lg font-bold">관리자</h1>
+          <p className="text-xs text-muted mt-1">
             비밀번호를 입력하세요
           </p>
         </div>
@@ -34,16 +33,16 @@ export default function AdminLogin({ onLogin, error }: AdminLoginProps) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="비밀번호"
-            className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-all"
+            className="w-full px-4 py-3 rounded-lg border-2 border-border bg-surface text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all"
             autoFocus
           />
           {error && (
-            <p className="text-sm text-red-500 text-center">{error}</p>
+            <p className="text-xs text-accent">{error}</p>
           )}
           <button
             type="submit"
             disabled={!password.trim()}
-            className="w-full py-3 rounded-xl bg-stone-900 text-white font-medium hover:bg-stone-800 disabled:bg-stone-300 disabled:cursor-not-allowed transition-colors"
+            className="w-full py-3 rounded-lg bg-foreground text-background font-medium hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
           >
             로그인
           </button>
