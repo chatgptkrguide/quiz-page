@@ -76,7 +76,7 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
       <header className="py-4 px-6 border-b border-border/50">
         <div className="flex items-center justify-center gap-3">
           <p className="text-sm text-muted text-center font-serif tracking-wide">
-            {quiz.emoji} {quiz.title}
+            {quiz.title}
           </p>
           {phase === "quiz" && (
             <span className="text-[10px] text-accent bg-accent-light/40 px-2 py-0.5 rounded">
@@ -95,7 +95,7 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
         {phase === "name" && (
           <NameInput
             quizTitle={quiz.title}
-            quizEmoji={quiz.emoji}
+            quizLogo={quiz.logo}
             quizDescription={quiz.description}
             onSubmit={handleNameSubmit}
           />

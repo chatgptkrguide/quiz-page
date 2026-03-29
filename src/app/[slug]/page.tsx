@@ -21,7 +21,7 @@ export async function generateMetadata({
   if (!quiz) return { title: "퀴즈를 찾을 수 없습니다" };
 
   return {
-    title: `${quiz.emoji} ${quiz.title}`,
+    title: quiz.title,
     description: quiz.description,
   };
 }

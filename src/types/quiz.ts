@@ -39,14 +39,13 @@ export interface QuizResult {
   maxScore: number;
   title: string;
   description: string;
-  emoji: string;
 }
 
 export interface Quiz {
   slug: string;
   title: string;
   description: string;
-  emoji: string;
+  logo?: string;
   color: string;
   lessons: LessonSection[];
   questions: QuizQuestion[];

@@ -70,7 +70,6 @@ export default function AdminDashboard({
 
   return (
     <div className="min-h-screen">
-      {/* Header - 비대칭 레이아웃 */}
       <header className="border-b border-border px-6 py-6">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-lg font-bold">퀴즈 관리</h1>
@@ -81,7 +80,6 @@ export default function AdminDashboard({
       </header>
 
       <main className="max-w-3xl mx-auto px-4 py-8 space-y-10">
-        {/* Quiz Links - 다양한 카드 크기 */}
         <section>
           <h2 className="text-xs font-medium text-muted mb-4 tracking-wide">
             테스트 링크
@@ -94,16 +92,13 @@ export default function AdminDashboard({
                   i === 0 ? "pl-5 border-l-3 border-l-accent" : ""
                 }`}
               >
-                <div className="flex items-center gap-3 min-w-0">
-                  <span className="text-xl shrink-0">{quiz.emoji}</span>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {quiz.title}
-                    </p>
-                    <p className="text-[11px] text-muted">
-                      {quiz.questions.length}문제 · 전 문제 정답 필요
-                    </p>
-                  </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium truncate">
+                    {quiz.title}
+                  </p>
+                  <p className="text-[11px] text-muted">
+                    {quiz.questions.length}문제
+                  </p>
                 </div>
                 <button
                   onClick={() => copyLink(quiz.slug)}
@@ -120,7 +115,6 @@ export default function AdminDashboard({
           </div>
         </section>
 
-        {/* Results */}
         <section>
           <div className="flex items-end justify-between mb-4">
             <h2 className="text-xs font-medium text-muted tracking-wide">
@@ -134,7 +128,6 @@ export default function AdminDashboard({
             </button>
           </div>
 
-          {/* Filter chips */}
           <div className="flex gap-1.5 mb-5 flex-wrap">
             <button
               onClick={() => setSelectedSlug(null)}
@@ -156,12 +149,11 @@ export default function AdminDashboard({
                     : "text-muted hover:text-foreground"
                 }`}
               >
-                {quiz.emoji} {quiz.slug}
+                {quiz.slug}
               </button>
             ))}
           </div>
 
-          {/* Results */}
           {loading ? (
             <p className="text-xs text-muted py-8 text-center">로딩 중...</p>
           ) : filteredResults.length === 0 ? (

@@ -6,7 +6,7 @@ export const quizzes: Quiz[] = [
     title: "식단하조 이해도 테스트",
     description:
       "먹는 걸 기록하면, 몸이 달라진다. 식단하조 모임을 잘 이해했는지 확인해보세요.",
-    emoji: "🥗",
+    logo: "",
     color: "#4ade80",
     lessons: [
       {
@@ -184,9 +184,9 @@ export const quizzes: Quiz[] = [
       },
     ],
     results: [
-      { minScore: 0, maxScore: 3, title: "식단 초보", description: "함께 배워가요", emoji: "🌱" },
-      { minScore: 4, maxScore: 7, title: "식단 중수", description: "조금만 더!", emoji: "🌿" },
-      { minScore: 8, maxScore: 10, title: "식단 마스터", description: "완벽하게 이해하셨네요!", emoji: "🏆" },
+      { minScore: 0, maxScore: 3, title: "식단 초보", description: "함께 배워가요" },
+      { minScore: 4, maxScore: 7, title: "식단 중수", description: "조금만 더!" },
+      { minScore: 8, maxScore: 10, title: "식단 마스터", description: "완벽하게 이해하셨네요!" },
     ],
   },
   {
@@ -194,7 +194,7 @@ export const quizzes: Quiz[] = [
     title: "AI 써보조 이해도 테스트",
     description:
       "직접 써보고, 진짜 내 것으로 만들자. AI 써보조 모임 내용을 잘 이해했는지 확인해보세요.",
-    emoji: "🤖",
+    logo: "",
     color: "#818cf8",
     lessons: [
       {
@@ -378,9 +378,9 @@ export const quizzes: Quiz[] = [
       },
     ],
     results: [
-      { minScore: 0, maxScore: 3, title: "AI 입문자", description: "함께 배워봐요!", emoji: "🔰" },
-      { minScore: 4, maxScore: 7, title: "AI 활용러", description: "더 깊이 파보아요!", emoji: "💡" },
-      { minScore: 8, maxScore: 10, title: "AI 전문가", description: "AI 써보조의 핵심 멤버감!", emoji: "🧠" },
+      { minScore: 0, maxScore: 3, title: "AI 입문자", description: "함께 배워봐요!" },
+      { minScore: 4, maxScore: 7, title: "AI 활용러", description: "더 깊이 파보아요!" },
+      { minScore: 8, maxScore: 10, title: "AI 전문가", description: "AI 써보조의 핵심 멤버감!" },
     ],
   },
 ];

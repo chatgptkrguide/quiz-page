@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 interface NameInputProps {
   quizTitle: string;
-  quizEmoji: string;
+  quizLogo?: string;
   quizDescription: string;
   onSubmit: (name: string) => void;
 }
 
 export default function NameInput({
   quizTitle,
-  quizEmoji,
+  quizLogo,
   quizDescription,
   onSubmit,
 }: NameInputProps) {
@@ -28,7 +29,15 @@ export default function NameInput({
     <div className="min-h-[75vh] flex items-center justify-center px-4">
       <div className="w-full max-w-sm animate-fade-in">
         <div className="mb-10">
-          <span className="text-5xl block mb-5">{quizEmoji}</span>
+          {quizLogo && (
+            <Image
+              src={quizLogo}
+              alt={quizTitle}
+              width={48}
+              height={48}
+              className="mb-5 rounded-lg"
+            />
+          )}
           <h1 className="text-2xl font-bold leading-snug mb-2">
             {quizTitle}
           </h1>
