@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "퀴즈 테스트",
-  description: "다양한 퀴즈 테스트를 풀어보세요",
+  title: "조모임 상세 설명",
+  description: "조모임 설명을 읽고 퀴즈로 확인해보세요",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
