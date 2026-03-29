@@ -35,32 +35,15 @@ export default function QuizResult({
     <div className="w-full max-w-sm mx-auto animate-fade-in px-1">
       <div className="text-center mb-10">
         <p className="text-[13px] text-foreground/40 mb-3">{name}님의 결과</p>
-        <h2 className="text-[24px] font-bold mb-2">
+        <h2 className="text-[24px] font-bold mb-4">
           <span className="accent-underline">전 문제 통과</span>
         </h2>
-        <p className="text-[15px] text-foreground/50 mt-4">
+        <p className="text-[15px] text-foreground/50">
           {totalQuestions}문제를 모두 맞혔습니다.
         </p>
       </div>
 
-      <div className="bg-surface rounded-xl border border-border p-6 mb-8">
-        <div className="flex items-center justify-center gap-8">
-          <div className="text-center">
-            <p className="text-[28px] font-bold text-accent">
-              {totalQuestions}
-              <span className="text-[16px] text-foreground/30 font-normal">/{totalQuestions}</span>
-            </p>
-            <p className="text-[12px] text-foreground/35 mt-1">정답 수</p>
-          </div>
-          <div className="w-px h-10 bg-border" />
-          <div className="text-center">
-            <p className="text-[28px] font-bold text-accent">100%</p>
-            <p className="text-[12px] text-foreground/35 mt-1">정답률</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-3">
+      <div className="space-y-3 mt-8">
         <button
           onClick={handleShare}
           className="w-full py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 transition-opacity"

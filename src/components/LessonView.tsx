@@ -22,15 +22,17 @@ export default function LessonView({
   const handleNext = () => setCurrent((prev) => prev + 1);
   const handlePrev = () => setCurrent((prev) => Math.max(0, prev - 1));
 
+  const progress = isLast
+    ? 100
+    : Math.round(((current + 1) / lessons.length) * 100);
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* progress */}
       <div className="w-full h-1 bg-border/60">
         <div
           className="h-full bg-accent transition-all duration-500 ease-out"
-          style={{
-            width: `${((current + 1) / (lessons.length + 1)) * 100}%`,
-          }}
+          style={{ width: `${progress}%` }}
         />
       </div>
 
@@ -44,12 +46,12 @@ export default function LessonView({
               </p>
 
               {/* title */}
-              <h2 className="text-[20px] font-bold leading-snug mb-6">
+              <h2 className="text-[22px] font-bold leading-snug mb-6">
                 {lesson.title}
               </h2>
 
-              {/* content - 자연스러운 줄바꿈 */}
-              <div className="text-[15px] text-foreground/65 leading-[1.85] mb-6">
+              {/* content */}
+              <div className="text-[15px] text-foreground/70 leading-[1.85] mb-6 max-w-prose">
                 {lesson.content.split('. ').map((sentence, i, arr) => (
                   <span key={i}>
                     {sentence}{i < arr.length - 1 ? '.' : ''}
@@ -86,7 +88,7 @@ export default function LessonView({
                   onClick={handleNext}
                   className="flex-1 py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 transition-opacity"
                 >
-                  {current < lessons.length - 1 ? "다음" : "설명 완료"}
+                  {current < lessons.length - 1 ? "다음" : "퀴즈 준비하기"}
                 </button>
               </div>
             </div>
@@ -95,13 +97,13 @@ export default function LessonView({
               <p className="text-[12px] text-foreground/35 mb-4">
                 설명을 모두 읽었습니다
               </p>
-              <h2 className="text-[20px] font-bold mb-3">
+              <h2 className="text-[22px] font-bold mb-3">
                 퀴즈로 확인해볼까요?
               </h2>
               <p className="text-[15px] text-foreground/50 mb-2">
                 {totalQuestions}개의 문제가 있습니다.
               </p>
-              <p className="text-[13px] text-foreground/30 mb-10">
+              <p className="text-[13px] text-foreground/35 mb-10">
                 틀리면 다시 풀 수 있어요. 모든 문제를 맞혀야 통과합니다.
               </p>
               <div className="flex gap-3">

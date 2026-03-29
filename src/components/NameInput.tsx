@@ -60,7 +60,7 @@ export default function NameInput({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="홍길동"
-              className="w-full px-4 py-3.5 rounded-lg border-2 border-border bg-surface text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all text-[15px]"
+              className="w-full px-4 py-3.5 rounded-lg border-2 border-border bg-surface text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/40 transition-all text-[15px]"
               autoFocus
               maxLength={20}
             />
@@ -74,9 +74,13 @@ export default function NameInput({
           </button>
         </form>
 
-        <p className="text-[12px] text-foreground/30 mt-8">
-          설명을 읽은 뒤, 퀴즈로 확인합니다
-        </p>
+        <div className="mt-8 flex items-center gap-2 text-[12px] text-foreground/35">
+          <span>설명 읽기</span>
+          <span className="text-foreground/15">→</span>
+          <span>퀴즈 풀기</span>
+          <span className="text-foreground/15">→</span>
+          <span>통과</span>
+        </div>
       </div>
     </div>
   );

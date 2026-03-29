@@ -71,7 +71,7 @@ function MultipleChoice({
       })}
       {wrongIds.size > 0 && !solved && (
         <p className="animate-fade-in text-[13px] text-accent mt-3 pl-1 font-medium">
-          틀렸습니다. 다시 골라보세요.
+          틀렸습니다. 다른 선택지를 골라보세요.
         </p>
       )}
       {solved && question.explanation && (
@@ -123,7 +123,7 @@ function OXChoice({
         <button
           onClick={() => handleSelect(true)}
           disabled={solved || wrongValue === true}
-          className={`animate-slide-up animate-delay-100 py-8 rounded-lg border-2 transition-all text-center ${getStyle(true)} ${shaking && wrongValue === true ? "animate-shake" : ""} disabled:cursor-not-allowed`}
+          className={`animate-slide-up animate-delay-100 py-6 rounded-lg border-2 transition-all text-center ${getStyle(true)} ${shaking && wrongValue === true ? "animate-shake" : ""} disabled:cursor-not-allowed`}
         >
           <span className="text-2xl font-bold block mb-1">O</span>
           <span className="text-[13px] text-foreground/40">맞다</span>
@@ -131,7 +131,7 @@ function OXChoice({
         <button
           onClick={() => handleSelect(false)}
           disabled={solved || wrongValue === false}
-          className={`animate-slide-up animate-delay-200 py-8 rounded-lg border-2 transition-all text-center ${getStyle(false)} ${shaking && wrongValue === false ? "animate-shake" : ""} disabled:cursor-not-allowed`}
+          className={`animate-slide-up animate-delay-200 py-6 rounded-lg border-2 transition-all text-center ${getStyle(false)} ${shaking && wrongValue === false ? "animate-shake" : ""} disabled:cursor-not-allowed`}
         >
           <span className="text-2xl font-bold block mb-1">X</span>
           <span className="text-[13px] text-foreground/40">틀리다</span>
@@ -139,7 +139,7 @@ function OXChoice({
       </div>
       {wrongValue !== null && !solved && (
         <p className="animate-fade-in text-[13px] text-accent mt-2 pl-1 font-medium">
-          아닙니다. 다시 생각해보세요.
+          틀렸습니다. 다시 생각해보세요.
         </p>
       )}
       {solved && question.explanation && (
@@ -197,14 +197,14 @@ function ShortAnswer({
           className={`w-full px-4 py-3.5 rounded-lg border-2 bg-surface placeholder:text-foreground/25 focus:outline-none transition-all text-[15px] ${
             solved
               ? "border-emerald-600 bg-emerald-50"
-              : "border-border focus:border-accent focus:ring-1 focus:ring-accent/30"
+              : "border-border focus:border-accent focus:ring-2 focus:ring-accent/40"
           }`}
           autoFocus
         />
       </div>
       {wrongAttempts.length > 0 && !solved && (
         <p className="animate-fade-in text-[13px] text-accent pl-1 font-medium">
-          &apos;{wrongAttempts[wrongAttempts.length - 1]}&apos;은(는) 정답이 아닙니다. 다시 입력해보세요.
+          틀렸습니다. 다시 입력해보세요.
         </p>
       )}
       {!solved && (
@@ -255,7 +255,7 @@ export default function QuizQuestionComponent({
         </div>
       </div>
 
-      <h2 className="text-[17px] font-bold leading-relaxed mb-7">
+      <h2 className="text-[18px] font-bold leading-relaxed mb-7">
         {question.question}
       </h2>
 

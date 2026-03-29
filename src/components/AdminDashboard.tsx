@@ -85,12 +85,10 @@ export default function AdminDashboard({
             테스트 링크
           </h2>
           <div className="space-y-2">
-            {quizzes.map((quiz, i) => (
+            {quizzes.map((quiz) => (
               <div
                 key={quiz.slug}
-                className={`bg-surface rounded-lg border border-border p-4 flex items-center justify-between ${
-                  i === 0 ? "pl-5 border-l-3 border-l-accent" : ""
-                }`}
+                className="bg-surface rounded-lg border border-border p-4 flex items-center justify-between"
               >
                 <div className="min-w-0">
                   <p className="text-sm font-medium truncate">
@@ -165,27 +163,21 @@ export default function AdminDashboard({
               {filteredResults.map((r) => (
                 <div
                   key={r.id}
-                  className="bg-surface border border-border rounded-lg px-4 py-3 flex items-center justify-between gap-3"
+                  className="bg-surface border border-border rounded-lg px-4 py-3"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                          r.passed ? "bg-emerald-500" : "bg-red-400"
+                        }`}
+                      />
+                      <span className="text-[14px] font-medium truncate">
+                        {r.name}
+                      </span>
+                    </div>
                     <span
-                      className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                        r.passed ? "bg-emerald-500" : "bg-red-400"
-                      }`}
-                    />
-                    <span className="text-sm font-medium truncate">
-                      {r.name}
-                    </span>
-                    <span className="text-[11px] text-muted shrink-0">
-                      {r.slug}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-xs text-muted">
-                      {r.score}/{r.totalQuestions}
-                    </span>
-                    <span
-                      className={`text-[11px] font-medium px-2 py-0.5 rounded ${
+                      className={`text-[11px] font-medium px-2 py-0.5 rounded shrink-0 ${
                         r.passed
                           ? "bg-emerald-50 text-emerald-700"
                           : "bg-red-50 text-red-500"
@@ -193,9 +185,11 @@ export default function AdminDashboard({
                     >
                       {r.passed ? "통과" : "미통과"}
                     </span>
-                    <span className="text-[11px] text-muted/50 w-16 text-right">
-                      {formatDate(r.submittedAt)}
-                    </span>
+                  </div>
+                  <div className="flex items-center gap-3 mt-1.5 pl-4 text-[12px] text-foreground/35">
+                    <span>{r.slug}</span>
+                    <span>{r.score}/{r.totalQuestions}문제</span>
+                    <span className="ml-auto">{formatDate(r.submittedAt)}</span>
                   </div>
                 </div>
               ))}
