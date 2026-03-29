@@ -26,7 +26,7 @@ export default function NameInput({
   };
 
   return (
-    <div className="min-h-[75vh] flex items-center justify-center px-5">
+    <div className="flex items-center justify-center px-1">
       <div className="w-full max-w-sm animate-fade-in">
         <div className="mb-10">
           {quizLogo && (

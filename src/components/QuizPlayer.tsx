@@ -71,11 +71,22 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
     savedRef.current = false;
   }, []);
 
+  if (phase === "lesson") {
+    return (
+      <LessonView
+        lessons={quiz.lessons}
+        quizTitle="퀴즈"
+        totalQuestions={quiz.questions.length}
+        onStartQuiz={handleStartQuiz}
+      />
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="py-4 px-6 border-b border-border/40">
+    <div className="h-[100dvh] flex flex-col overflow-hidden">
+      <header className="py-3 px-6 border-b border-border/40 shrink-0">
         <div className="flex items-center justify-center gap-2.5">
-          <p className="text-[14px] text-foreground/50 text-center">
+          <p className="text-[13px] text-foreground/50 text-center">
             {quiz.title}
           </p>
           {phase === "quiz" && (
@@ -83,29 +94,16 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
               퀴즈
             </span>
           )}
-          {phase === "lesson" && (
-            <span className="text-[11px] text-foreground/35 bg-foreground/5 px-2 py-0.5 rounded">
-              설명
-            </span>
-          )}
         </div>
       </header>
 
-      <main className={`flex-1 ${phase === "lesson" ? "" : "flex items-center justify-center px-4 py-8"}`}>
+      <main className="flex-1 flex items-center justify-center px-5 overflow-y-auto">
         {phase === "name" && (
           <NameInput
             quizTitle={quiz.title}
             quizLogo={quiz.logo}
             quizDescription={quiz.description}
             onSubmit={handleNameSubmit}
-          />
-        )}
-        {phase === "lesson" && (
-          <LessonView
-            lessons={quiz.lessons}
-            quizTitle="퀴즈"
-            totalQuestions={quiz.questions.length}
-            onStartQuiz={handleStartQuiz}
           />
         )}
         {phase === "quiz" && (
