@@ -10,6 +10,8 @@ interface QuizResultProps {
   onRetry: () => void;
 }
 
+const PASS_THRESHOLD = 60;
+
 function getResult(results: QuizResultType[], score: number): QuizResultType {
   return (
     results.find((r) => score >= r.minScore && score <= r.maxScore) ??
@@ -26,9 +28,10 @@ export default function QuizResult({
 }: QuizResultProps) {
   const result = getResult(quiz.results, score);
   const percentage = Math.round((score / totalQuestions) * 100);
+  const passed = percentage >= PASS_THRESHOLD;
 
   const handleShare = async () => {
-    const text = `[${quiz.title}]\n${name}님의 결과: ${result.emoji} ${result.title}\n${score}/${totalQuestions}문제 정답 (${percentage}%)\n\n나도 테스트하기 👉 ${window.location.href}`;
+    const text = `[${quiz.title}]\n${name}님의 결과: ${result.emoji} ${result.title}\n${score}/${totalQuestions}문제 정답 (${percentage}%)\n${passed ? "✅ 통과!" : "❌ 미통과"}\n\n나도 테스트하기 👉 ${window.location.href}`;
 
     if (navigator.share) {
       try {
@@ -45,7 +48,7 @@ export default function QuizResult({
 
   return (
     <div className="w-full max-w-md mx-auto text-center animate-fade-in">
-      <div className="mb-8">
+      <div className="mb-6">
         <span className="text-7xl block mb-4 animate-slide-up">
           {result.emoji}
         </span>
@@ -56,6 +59,17 @@ export default function QuizResult({
         <p className="text-stone-500 text-sm leading-relaxed">
           {result.description}
         </p>
+      </div>
+
+      {/* Pass/Fail Badge */}
+      <div
+        className={`inline-block px-5 py-2 rounded-full text-sm font-semibold mb-6 ${
+          passed
+            ? "bg-emerald-100 text-emerald-700"
+            : "bg-red-100 text-red-600"
+        }`}
+      >
+        {passed ? "✅ 통과" : "❌ 미통과"} (기준: {PASS_THRESHOLD}%)
       </div>
 
       <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
