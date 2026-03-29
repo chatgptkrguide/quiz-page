@@ -41,7 +41,7 @@ export default function NameInput({
           <h1 className="text-[22px] font-bold leading-snug mb-3">
             {quizTitle}
           </h1>
-          <p className="text-[15px] text-foreground/60 leading-relaxed">
+          <p className="text-[15px] text-foreground/60 leading-relaxed whitespace-pre-line">
             {quizDescription}
           </p>
         </div>
