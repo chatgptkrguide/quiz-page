@@ -27,6 +27,13 @@ export interface ShortAnswerQuestion extends QuizQuestionBase {
 
 export type QuizQuestion = MultipleChoiceQuestion | OXQuestion | ShortAnswerQuestion;
 
+export interface LessonSection {
+  id: string;
+  title: string;
+  content: string;
+  highlight?: string;
+}
+
 export interface QuizResult {
   minScore: number;
   maxScore: number;
@@ -41,6 +48,7 @@ export interface Quiz {
   description: string;
   emoji: string;
   color: string;
+  lessons: LessonSection[];
   questions: QuizQuestion[];
   results: QuizResult[];
 }

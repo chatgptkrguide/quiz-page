@@ -3,10 +3,11 @@
 import { useState, useCallback, useRef } from "react";
 import { Quiz } from "@/types/quiz";
 import NameInput from "./NameInput";
+import LessonView from "./LessonView";
 import QuizQuestionComponent from "./QuizQuestion";
 import QuizResult from "./QuizResult";
 
-type Phase = "name" | "quiz" | "result";
+type Phase = "name" | "lesson" | "quiz" | "result";
 
 interface QuizPlayerProps {
   quiz: Quiz;
@@ -18,8 +19,17 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const savedRef = useRef(false);
 
-  const handleNameSubmit = useCallback((submittedName: string) => {
-    setName(submittedName);
+  const hasLessons = quiz.lessons.length > 0;
+
+  const handleNameSubmit = useCallback(
+    (submittedName: string) => {
+      setName(submittedName);
+      setPhase(hasLessons ? "lesson" : "quiz");
+    },
+    [hasLessons]
+  );
+
+  const handleStartQuiz = useCallback(() => {
     setPhase("quiz");
   }, []);
 
@@ -64,18 +74,38 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="py-4 px-6 border-b border-border/50">
-        <p className="text-sm text-muted text-center font-serif tracking-wide">
-          {quiz.emoji} {quiz.title}
-        </p>
+        <div className="flex items-center justify-center gap-3">
+          <p className="text-sm text-muted text-center font-serif tracking-wide">
+            {quiz.emoji} {quiz.title}
+          </p>
+          {phase === "quiz" && (
+            <span className="text-[10px] text-accent bg-accent-light/40 px-2 py-0.5 rounded">
+              퀴즈
+            </span>
+          )}
+          {phase === "lesson" && (
+            <span className="text-[10px] text-muted bg-border/50 px-2 py-0.5 rounded">
+              설명
+            </span>
+          )}
+        </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-4 py-8">
+      <main className={`flex-1 ${phase === "lesson" ? "" : "flex items-center justify-center px-4 py-8"}`}>
         {phase === "name" && (
           <NameInput
             quizTitle={quiz.title}
             quizEmoji={quiz.emoji}
             quizDescription={quiz.description}
             onSubmit={handleNameSubmit}
+          />
+        )}
+        {phase === "lesson" && (
+          <LessonView
+            lessons={quiz.lessons}
+            quizTitle="퀴즈"
+            totalQuestions={quiz.questions.length}
+            onStartQuiz={handleStartQuiz}
           />
         )}
         {phase === "quiz" && (

@@ -66,7 +66,7 @@ export default function NameInput({
         </form>
 
         <p className="text-[11px] text-muted/50 mt-8">
-          모든 문제를 맞혀야 통과할 수 있습니다. 틀리면 다시 풀어요.
+          설명을 먼저 읽고, 퀴즈로 확인합니다
         </p>
       </div>
     </div>
