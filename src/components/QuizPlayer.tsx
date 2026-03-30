@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
-import { Quiz } from "@/types/quiz";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
+import { Quiz, QuizQuestion } from "@/types/quiz";
 import NameInput from "./NameInput";
 import LessonView from "./LessonView";
 import QuizQuestionComponent from "./QuizQuestion";
@@ -19,6 +19,7 @@ interface SavedProgress {
   currentIndex: number;
   savedResult: boolean;
   wrongIds: string[];
+  retryMode: boolean;
 }
 
 function getStorageKey(slug: string): string {
@@ -56,12 +57,20 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
   const [name, setName] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [wrongIds, setWrongIds] = useState<Set<string>>(new Set());
+  const [retryMode, setRetryMode] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const savedRef = useRef(false);
 
   const hasLessons = quiz.lessons.length > 0;
-  const hadWrong = wrongIds.size > 0;
+
+  // 현재 풀어야 할 문제 목록
+  const activeQuestions: QuizQuestion[] = useMemo(() => {
+    if (retryMode) {
+      return quiz.questions.filter((q) => wrongIds.has(q.id));
+    }
+    return quiz.questions;
+  }, [retryMode, wrongIds, quiz.questions]);
 
   useEffect(() => {
     const saved = loadProgress(quiz.slug);
@@ -71,6 +80,7 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
       setCurrentIndex(saved.currentIndex);
       savedRef.current = saved.savedResult;
       if (saved.wrongIds) setWrongIds(new Set(saved.wrongIds));
+      if (saved.retryMode) setRetryMode(true);
     }
     setLoaded(true);
   }, [quiz.slug]);
@@ -84,8 +94,9 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
       currentIndex,
       savedResult: savedRef.current,
       wrongIds: Array.from(wrongIds),
+      retryMode,
     });
-  }, [phase, name, currentIndex, loaded, quiz.slug, wrongIds]);
+  }, [phase, name, currentIndex, loaded, quiz.slug, wrongIds, retryMode]);
 
   const handleNameSubmit = useCallback(
     (submittedName: string) => {
@@ -136,25 +147,23 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
   }, [saveResult]);
 
   const handleCorrect = useCallback(() => {
-    if (currentIndex + 1 < quiz.questions.length) {
+    if (currentIndex + 1 < activeQuestions.length) {
       setCurrentIndex((prev) => prev + 1);
     } else {
       saveResult();
       setPhase("result");
     }
-  }, [currentIndex, quiz.questions.length, saveResult]);
+  }, [currentIndex, activeQuestions.length, saveResult]);
 
-  // 틀린 문제 기록 (QuizQuestion에서 호출)
   const handleWrong = useCallback((questionId: string) => {
     setWrongIds((prev) => new Set(prev).add(questionId));
   }, []);
 
   // 틀린 문제만 다시 풀기
   const handleRetryWrong = useCallback(() => {
+    setRetryMode(true);
     setCurrentIndex(0);
-    setWrongIds(new Set());
     setPhase("quiz");
-    savedRef.current = false;
   }, []);
 
   const handleRetry = useCallback(() => {
@@ -162,6 +171,7 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
     setCurrentIndex(0);
     setName("");
     setWrongIds(new Set());
+    setRetryMode(false);
     savedRef.current = false;
     setSaveFailed(false);
     clearProgress(quiz.slug);
@@ -188,6 +198,8 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
     );
   }
 
+  const currentQuestion = activeQuestions[currentIndex];
+
   return (
     <div data-theme={quiz.theme} className="h-[100dvh] flex flex-col overflow-hidden bg-background text-foreground">
       <header className="py-3 px-6 border-b border-border/40 shrink-0">
@@ -208,7 +220,7 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
             </p>
             {phase === "quiz" && (
               <span className="text-[11px] text-accent bg-accent/10 px-2 py-0.5 rounded font-medium">
-                퀴즈
+                {retryMode ? "재풀이" : "퀴즈"}
               </span>
             )}
           </div>
@@ -225,12 +237,12 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
             onSubmit={handleNameSubmit}
           />
         )}
-        {phase === "quiz" && (
+        {phase === "quiz" && currentQuestion && (
           <QuizQuestionComponent
-            key={`${quiz.questions[currentIndex].id}-${currentIndex}`}
-            question={quiz.questions[currentIndex]}
+            key={`${currentQuestion.id}-${currentIndex}-${retryMode}`}
+            question={currentQuestion}
             questionNumber={currentIndex + 1}
-            totalQuestions={quiz.questions.length}
+            totalQuestions={activeQuestions.length}
             onCorrect={handleCorrect}
             onWrong={handleWrong}
           />
@@ -240,7 +252,7 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
             quiz={quiz}
             name={name}
             totalQuestions={quiz.questions.length}
-            hadWrong={hadWrong}
+            hadWrong={wrongIds.size > 0}
             onRetryWrong={handleRetryWrong}
             onRetry={handleRetry}
             saveFailed={saveFailed}

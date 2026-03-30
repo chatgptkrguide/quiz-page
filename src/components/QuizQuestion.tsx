@@ -18,33 +18,28 @@ interface QuizQuestionProps {
 
 function MultipleChoice({
   question,
-  onCorrect,
+  onSolved,
   onWrong,
 }: {
   question: MultipleChoiceQuestion;
-  onCorrect: () => void;
+  onSolved: () => void;
   onWrong?: () => void;
 }) {
-  const [selected, setSelected] = useState<string | null>(null);
   const [wrongIds, setWrongIds] = useState<Set<string>>(new Set());
   const [shakeId, setShakeId] = useState<string | null>(null);
   const [solved, setSolved] = useState(false);
 
   const handleSelect = (id: string) => {
     if (solved || wrongIds.has(id)) return;
-    setSelected(id);
 
     if (id === question.correctAnswer) {
       setSolved(true);
-      setTimeout(() => onCorrect(), 1200);
+      onSolved();
     } else {
       setShakeId(id);
       setWrongIds((prev) => new Set(prev).add(id));
       onWrong?.();
-      setTimeout(() => {
-        setShakeId(null);
-        setSelected(null);
-      }, 600);
+      setTimeout(() => setShakeId(null), 600);
     }
   };
 
@@ -52,14 +47,18 @@ function MultipleChoice({
     <div className="space-y-2.5">
       {question.options.map((option, i) => {
         const isWrong = wrongIds.has(option.id);
-        const isCorrectAndSolved = solved && option.id === question.correctAnswer;
+        const isCorrect = option.id === question.correctAnswer;
         const isShaking = shakeId === option.id;
 
         let style = "border-border bg-surface hover:border-foreground/20 cursor-pointer";
-        if (isCorrectAndSolved) {
-          style = "border-emerald-600 bg-emerald-50 ring-2 ring-emerald-500/20 animate-pulse-success";
+        if (solved && isCorrect) {
+          style = "border-emerald-600 bg-emerald-50 text-emerald-800";
+        } else if (solved && isWrong) {
+          style = "border-red-400 bg-red-50 text-red-500 line-through";
         } else if (isWrong) {
-          style = "border-transparent bg-foreground/[0.03] text-foreground/30 cursor-not-allowed line-through";
+          style = "border-red-400 bg-red-50 text-red-500 line-through";
+        } else if (solved) {
+          style = "border-border/50 bg-surface/50 text-foreground/30";
         }
 
         return (
@@ -67,7 +66,7 @@ function MultipleChoice({
             key={option.id}
             onClick={() => handleSelect(option.id)}
             disabled={solved || isWrong}
-            className={`animate-slide-up animate-delay-${(i + 1) * 100} w-full text-left px-5 py-4 rounded-lg border-2 transition-all ${style} ${isShaking ? "animate-shake" : ""} disabled:cursor-not-allowed`}
+            className={`animate-slide-up animate-delay-${(i + 1) * 100} w-full text-left px-5 py-4 rounded-lg border-2 transition-all ${style} ${isShaking ? "animate-shake" : ""} disabled:cursor-default`}
           >
             <span className="text-[15px] leading-relaxed">{option.text}</span>
           </button>
@@ -79,11 +78,9 @@ function MultipleChoice({
         </p>
       )}
       {solved && question.explanation && (
-        <div className="animate-fade-in mt-4 px-4 py-3 bg-accent/8 border-l-[3px] border-accent rounded-r-md">
-          <p className="text-[14px] text-foreground/60 leading-relaxed">
-            {question.explanation}
-          </p>
-        </div>
+        <p className="animate-fade-in text-[13px] text-emerald-700 mt-3 pl-1">
+          {question.explanation}
+        </p>
       )}
     </div>
   );
@@ -91,11 +88,11 @@ function MultipleChoice({
 
 function OXChoice({
   question,
-  onCorrect,
+  onSolved,
   onWrong,
 }: {
   question: OXQuestion;
-  onCorrect: () => void;
+  onSolved: () => void;
   onWrong?: () => void;
 }) {
   const [wrongValue, setWrongValue] = useState<boolean | null>(null);
@@ -107,7 +104,7 @@ function OXChoice({
 
     if (answer === question.correctAnswer) {
       setSolved(true);
-      setTimeout(() => onCorrect(), 1200);
+      onSolved();
     } else {
       setWrongValue(answer);
       setShaking(true);
@@ -118,9 +115,13 @@ function OXChoice({
 
   const getStyle = (value: boolean): string => {
     if (solved && value === question.correctAnswer)
-      return "border-emerald-600 bg-emerald-50 ring-2 ring-emerald-500/20 animate-pulse-success";
+      return "border-emerald-600 bg-emerald-50 text-emerald-800";
+    if (solved && wrongValue === value)
+      return "border-red-400 bg-red-50 text-red-500";
     if (wrongValue === value)
-      return "border-transparent bg-foreground/[0.03] text-foreground/30 cursor-not-allowed";
+      return "border-red-400 bg-red-50 text-red-500";
+    if (solved)
+      return "border-border/50 bg-surface/50 text-foreground/30";
     return "border-border bg-surface hover:border-foreground/20 cursor-pointer";
   };
 
@@ -130,18 +131,18 @@ function OXChoice({
         <button
           onClick={() => handleSelect(true)}
           disabled={solved || wrongValue === true}
-          className={`animate-slide-up animate-delay-100 py-6 rounded-lg border-2 transition-all text-center ${getStyle(true)} ${shaking && wrongValue === true ? "animate-shake" : ""} disabled:cursor-not-allowed`}
+          className={`animate-slide-up animate-delay-100 py-6 rounded-lg border-2 transition-all text-center ${getStyle(true)} ${shaking && wrongValue === true ? "animate-shake" : ""} disabled:cursor-default`}
         >
           <span className="text-2xl font-bold block mb-1">O</span>
-          <span className="text-[13px] text-foreground/40">맞다</span>
+          <span className="text-[13px]">맞다</span>
         </button>
         <button
           onClick={() => handleSelect(false)}
           disabled={solved || wrongValue === false}
-          className={`animate-slide-up animate-delay-200 py-6 rounded-lg border-2 transition-all text-center ${getStyle(false)} ${shaking && wrongValue === false ? "animate-shake" : ""} disabled:cursor-not-allowed`}
+          className={`animate-slide-up animate-delay-200 py-6 rounded-lg border-2 transition-all text-center ${getStyle(false)} ${shaking && wrongValue === false ? "animate-shake" : ""} disabled:cursor-default`}
         >
           <span className="text-2xl font-bold block mb-1">X</span>
-          <span className="text-[13px] text-foreground/40">틀리다</span>
+          <span className="text-[13px]">틀리다</span>
         </button>
       </div>
       {wrongValue !== null && !solved && (
@@ -150,11 +151,9 @@ function OXChoice({
         </p>
       )}
       {solved && question.explanation && (
-        <div className="animate-fade-in mt-4 px-4 py-3 bg-accent/8 border-l-[3px] border-accent rounded-r-md">
-          <p className="text-[14px] text-foreground/60 leading-relaxed">
-            {question.explanation}
-          </p>
-        </div>
+        <p className="animate-fade-in text-[13px] text-emerald-700 mt-3 pl-1">
+          {question.explanation}
+        </p>
       )}
     </div>
   );
@@ -162,11 +161,11 @@ function OXChoice({
 
 function ShortAnswer({
   question,
-  onCorrect,
+  onSolved,
   onWrong,
 }: {
   question: ShortAnswerQuestion;
-  onCorrect: () => void;
+  onSolved: () => void;
   onWrong?: () => void;
 }) {
   const [value, setValue] = useState("");
@@ -185,7 +184,7 @@ function ShortAnswer({
 
     if (isCorrect(value)) {
       setSolved(true);
-      setTimeout(() => onCorrect(), 1200);
+      onSolved();
     } else {
       setWrongAttempts((prev) => [...prev, value.trim()]);
       setShaking(true);
@@ -206,7 +205,7 @@ function ShortAnswer({
           placeholder="답을 입력하세요"
           className={`w-full px-4 py-3.5 rounded-lg border-2 bg-surface placeholder:text-foreground/25 focus:outline-none transition-all text-[15px] ${
             solved
-              ? "border-emerald-600 bg-emerald-50"
+              ? "border-emerald-600 bg-emerald-50 text-emerald-800"
               : "border-border focus:border-accent focus:ring-2 focus:ring-accent/40"
           }`}
           autoFocus
@@ -227,11 +226,9 @@ function ShortAnswer({
         </button>
       )}
       {solved && question.explanation && (
-        <div className="animate-fade-in mt-4 px-4 py-3 bg-accent/8 border-l-[3px] border-accent rounded-r-md">
-          <p className="text-[14px] text-foreground/60 leading-relaxed">
-            {question.explanation}
-          </p>
-        </div>
+        <p className="animate-fade-in text-[13px] text-emerald-700 mt-1 pl-1">
+          {question.explanation}
+        </p>
       )}
     </form>
   );
@@ -244,10 +241,13 @@ export default function QuizQuestionComponent({
   onCorrect,
   onWrong,
 }: QuizQuestionProps) {
+  const [solved, setSolved] = useState(false);
+
+  const handleSolved = () => setSolved(true);
   const handleWrong = () => onWrong?.(question.id);
 
   return (
-    <div className="w-full max-w-lg mx-auto animate-fade-in px-1">
+    <div className="w-full max-w-lg mx-auto px-1">
       <div className="mb-8">
         <div className="flex items-end justify-between mb-3">
           <p className="text-[13px] text-foreground/40">
@@ -272,13 +272,22 @@ export default function QuizQuestionComponent({
       </h2>
 
       {question.type === "multiple-choice" && (
-        <MultipleChoice question={question} onCorrect={onCorrect} onWrong={handleWrong} />
+        <MultipleChoice question={question} onSolved={handleSolved} onWrong={handleWrong} />
       )}
       {question.type === "ox" && (
-        <OXChoice question={question} onCorrect={onCorrect} onWrong={handleWrong} />
+        <OXChoice question={question} onSolved={handleSolved} onWrong={handleWrong} />
       )}
       {question.type === "short-answer" && (
-        <ShortAnswer question={question} onCorrect={onCorrect} onWrong={handleWrong} />
+        <ShortAnswer question={question} onSolved={handleSolved} onWrong={handleWrong} />
+      )}
+
+      {solved && (
+        <button
+          onClick={onCorrect}
+          className="animate-fade-in w-full mt-6 py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 transition-opacity"
+        >
+          {questionNumber < totalQuestions ? "다음 문제" : "결과 보기"}
+        </button>
       )}
     </div>
   );
