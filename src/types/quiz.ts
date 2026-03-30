@@ -46,7 +46,7 @@ export interface Quiz {
   title: string;
   description: string;
   logo?: string;
-  color: string;
+  theme: string;
   lessons: LessonSection[];
   questions: QuizQuestion[];
   results: QuizResult[];

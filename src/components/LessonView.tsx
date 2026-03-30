@@ -27,7 +27,7 @@ export default function LessonView({
     : Math.round(((current + 1) / lessons.length) * 100);
 
   return (
-    <div className="h-[100dvh] flex flex-col overflow-hidden">
+    <div className="h-[100dvh] flex flex-col overflow-hidden bg-background text-foreground">
       {/* progress */}
       <div className="w-full h-1 bg-border/60 shrink-0">
         <div
@@ -91,7 +91,7 @@ export default function LessonView({
       </div>
 
       {/* fixed bottom nav */}
-      <div className="shrink-0 px-5 pb-6 pt-3 border-t border-border/30 bg-background">
+      <div className="shrink-0 px-5 pb-6 pt-3 border-t border-border/30">
         <div className="max-w-sm mx-auto flex gap-3">
           {current > 0 && (
             <button

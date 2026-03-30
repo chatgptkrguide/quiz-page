@@ -73,17 +73,19 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
 
   if (phase === "lesson") {
     return (
-      <LessonView
-        lessons={quiz.lessons}
-        quizTitle="퀴즈"
-        totalQuestions={quiz.questions.length}
-        onStartQuiz={handleStartQuiz}
-      />
+      <div data-theme={quiz.theme}>
+        <LessonView
+          lessons={quiz.lessons}
+          quizTitle="퀴즈"
+          totalQuestions={quiz.questions.length}
+          onStartQuiz={handleStartQuiz}
+        />
+      </div>
     );
   }
 
   return (
-    <div className="h-[100dvh] flex flex-col overflow-hidden">
+    <div data-theme={quiz.theme} className="h-[100dvh] flex flex-col overflow-hidden bg-background text-foreground">
       <header className="py-3 px-6 border-b border-border/40 shrink-0">
         <div className="flex items-center justify-center gap-2.5">
           <p className="text-[13px] text-foreground/50 text-center">

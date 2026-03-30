@@ -7,7 +7,7 @@ export const quizzes: Quiz[] = [
     description:
       "먹는 걸 기록하면, 몸이 달라진다.\n설명을 읽고 퀴즈로 확인해보세요.",
     logo: "/logo-식단하조.png",
-    color: "#4ade80",
+    theme: "식단하조",
     lessons: [
       {
         id: "diet-l1",
@@ -179,7 +179,7 @@ export const quizzes: Quiz[] = [
     description:
       "직접 써보고, 진짜 내 것으로 만들자.\n설명을 읽고 퀴즈로 확인해보세요.",
     logo: "",
-    color: "#818cf8",
+    theme: "AI써보조",
     lessons: [
       {
         id: "ai-l1",

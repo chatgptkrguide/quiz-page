@@ -2,6 +2,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&display=swap');
 
+/* === 기본 테마 (관리자 페이지 등) === */
 :root {
   --background: #f5f0eb;
   --foreground: #1a1a1a;
@@ -10,6 +11,28 @@
   --surface: #fffdf9;
   --muted: #6b6058;
   --border: #ddd5cb;
+}
+
+/* === 식단하조 테마 === */
+[data-theme="식단하조"] {
+  --background: #f0f7f1;
+  --foreground: #1a2e1c;
+  --accent: #22c55e;
+  --accent-light: #bbf7d0;
+  --surface: #f7fdf8;
+  --muted: #4b6b4f;
+  --border: #c6e8cc;
+}
+
+/* === AI써보조 테마 === */
+[data-theme="AI써보조"] {
+  --background: #f0f1f7;
+  --foreground: #1a1a2e;
+  --accent: #6366f1;
+  --accent-light: #c7d2fe;
+  --surface: #f8f7fd;
+  --muted: #5b5b80;
+  --border: #d4d4f0;
 }
 
 @theme inline {
