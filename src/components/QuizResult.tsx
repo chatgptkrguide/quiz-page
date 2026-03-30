@@ -85,12 +85,6 @@ export default function QuizResult({
             카톡에 자랑하기
           </button>
         )}
-        <button
-          onClick={onRetry}
-          className="w-full py-3.5 rounded-lg text-[14px] text-foreground/40 hover:text-foreground transition-colors"
-        >
-          처음부터 다시 하기
-        </button>
       </div>
     </div>
   );
