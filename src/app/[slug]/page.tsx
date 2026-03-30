@@ -14,7 +14,7 @@ export async function generateStaticParams() {
 }
 
 const faviconMap: Record<string, string> = {
-  "식단하조": "/favicon-식단하조.png?v=2",
+  "식단하조": "/favicon-식단하조.png?v=3",
 };
 
 const ogImageMap: Record<string, string> = {
