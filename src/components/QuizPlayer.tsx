@@ -176,15 +176,28 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
   return (
     <div data-theme={quiz.theme} className="h-[100dvh] flex flex-col overflow-hidden bg-background text-foreground">
       <header className="py-3 px-6 border-b border-border/40 shrink-0">
-        <div className="flex items-center justify-center gap-2.5">
-          <p className="text-[13px] text-foreground/50 text-center">
-            {quiz.title}
-          </p>
-          {phase === "quiz" && (
-            <span className="text-[11px] text-accent bg-accent/10 px-2 py-0.5 rounded font-medium">
-              퀴즈
-            </span>
+        <div className="flex items-center justify-between">
+          {phase === "quiz" && hasLessons ? (
+            <button
+              onClick={handleBackToLesson}
+              className="text-[12px] text-foreground/35 hover:text-foreground/60 transition-colors"
+            >
+              설명 다시 보기
+            </button>
+          ) : (
+            <div />
           )}
+          <div className="flex items-center gap-2">
+            <p className="text-[13px] text-foreground/50">
+              {quiz.title}
+            </p>
+            {phase === "quiz" && (
+              <span className="text-[11px] text-accent bg-accent/10 px-2 py-0.5 rounded font-medium">
+                퀴즈
+              </span>
+            )}
+          </div>
+          <div className="w-[80px]" />
         </div>
       </header>
 
@@ -198,25 +211,13 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
           />
         )}
         {phase === "quiz" && (
-          <div className="w-full">
-            <QuizQuestionComponent
-              key={`${quiz.questions[currentIndex].id}-${currentIndex}`}
-              question={quiz.questions[currentIndex]}
-              questionNumber={currentIndex + 1}
-              totalQuestions={quiz.questions.length}
-              onCorrect={handleCorrect}
-            />
-            {hasLessons && (
-              <div className="max-w-lg mx-auto mt-6 mb-4">
-                <button
-                  onClick={handleBackToLesson}
-                  className="text-[12px] text-foreground/30 hover:text-foreground/50 transition-colors"
-                >
-                  설명 다시 보기
-                </button>
-              </div>
-            )}
-          </div>
+          <QuizQuestionComponent
+            key={`${quiz.questions[currentIndex].id}-${currentIndex}`}
+            question={quiz.questions[currentIndex]}
+            questionNumber={currentIndex + 1}
+            totalQuestions={quiz.questions.length}
+            onCorrect={handleCorrect}
+          />
         )}
         {phase === "result" && (
           <QuizResult
