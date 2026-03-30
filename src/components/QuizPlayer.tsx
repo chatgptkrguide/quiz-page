@@ -18,6 +18,7 @@ interface SavedProgress {
   name: string;
   currentIndex: number;
   savedResult: boolean;
+  wrongIds: string[];
 }
 
 function getStorageKey(slug: string): string {
@@ -34,11 +35,11 @@ function loadProgress(slug: string): SavedProgress | null {
   }
 }
 
-function saveProgress(slug: string, data: SavedProgress): void {
+function saveProgressData(slug: string, data: SavedProgress): void {
   try {
     localStorage.setItem(getStorageKey(slug), JSON.stringify(data));
   } catch {
-    // storage full or unavailable
+    // storage full
   }
 }
 
@@ -54,13 +55,14 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
   const [phase, setPhase] = useState<Phase>("name");
   const [name, setName] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [wrongIds, setWrongIds] = useState<Set<string>>(new Set());
   const [saveFailed, setSaveFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const savedRef = useRef(false);
 
   const hasLessons = quiz.lessons.length > 0;
+  const hadWrong = wrongIds.size > 0;
 
-  // 진행상황 복원
   useEffect(() => {
     const saved = loadProgress(quiz.slug);
     if (saved && saved.phase !== "name") {
@@ -68,21 +70,22 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
       setName(saved.name);
       setCurrentIndex(saved.currentIndex);
       savedRef.current = saved.savedResult;
+      if (saved.wrongIds) setWrongIds(new Set(saved.wrongIds));
     }
     setLoaded(true);
   }, [quiz.slug]);
 
-  // 진행상황 저장 (phase, name, currentIndex 변경 시)
   useEffect(() => {
     if (!loaded) return;
     if (phase === "name") return;
-    saveProgress(quiz.slug, {
+    saveProgressData(quiz.slug, {
       phase,
       name,
       currentIndex,
       savedResult: savedRef.current,
+      wrongIds: Array.from(wrongIds),
     });
-  }, [phase, name, currentIndex, loaded, quiz.slug]);
+  }, [phase, name, currentIndex, loaded, quiz.slug, wrongIds]);
 
   const handleNameSubmit = useCallback(
     (submittedName: string) => {
@@ -96,7 +99,6 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
     setPhase("quiz");
   }, []);
 
-  // 설명 다시 보기
   const handleBackToLesson = useCallback(() => {
     setPhase("lesson");
   }, []);
@@ -142,16 +144,29 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
     }
   }, [currentIndex, quiz.questions.length, saveResult]);
 
+  // 틀린 문제 기록 (QuizQuestion에서 호출)
+  const handleWrong = useCallback((questionId: string) => {
+    setWrongIds((prev) => new Set(prev).add(questionId));
+  }, []);
+
+  // 틀린 문제만 다시 풀기
+  const handleRetryWrong = useCallback(() => {
+    setCurrentIndex(0);
+    setWrongIds(new Set());
+    setPhase("quiz");
+    savedRef.current = false;
+  }, []);
+
   const handleRetry = useCallback(() => {
     setPhase("name");
     setCurrentIndex(0);
     setName("");
+    setWrongIds(new Set());
     savedRef.current = false;
     setSaveFailed(false);
     clearProgress(quiz.slug);
   }, [quiz.slug]);
 
-  // 로딩 중
   if (!loaded) {
     return (
       <div data-theme={quiz.theme} className="h-[100dvh] flex items-center justify-center bg-background">
@@ -217,6 +232,7 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
             questionNumber={currentIndex + 1}
             totalQuestions={quiz.questions.length}
             onCorrect={handleCorrect}
+            onWrong={handleWrong}
           />
         )}
         {phase === "result" && (
@@ -224,6 +240,8 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
             quiz={quiz}
             name={name}
             totalQuestions={quiz.questions.length}
+            hadWrong={hadWrong}
+            onRetryWrong={handleRetryWrong}
             onRetry={handleRetry}
             saveFailed={saveFailed}
             onRetrySave={handleRetrySave}

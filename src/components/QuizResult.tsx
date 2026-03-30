@@ -6,6 +6,8 @@ interface QuizResultProps {
   quiz: Quiz;
   name: string;
   totalQuestions: number;
+  hadWrong: boolean;
+  onRetryWrong: () => void;
   onRetry: () => void;
   saveFailed?: boolean;
   onRetrySave?: () => void;
@@ -15,24 +17,25 @@ export default function QuizResult({
   quiz,
   name,
   totalQuestions,
+  hadWrong,
+  onRetryWrong,
   onRetry,
   saveFailed,
   onRetrySave,
 }: QuizResultProps) {
-  const handleShare = async () => {
-    const text = `[${quiz.title}] ${name}님이 전 문제를 통과했습니다.\n${totalQuestions}문제 모두 정답\n\n나도 도전하기: ${window.location.href}`;
+  const handleShareKakao = async () => {
+    const text = `[${quiz.title}]\n${name}님이 ${totalQuestions}문제 전부 통과!\n\n나도 도전하기: ${window.location.href}`;
 
     if (navigator.share) {
       try {
         await navigator.share({ text });
+        return;
       } catch {
-        await navigator.clipboard.writeText(text);
-        alert("결과가 복사되었습니다!");
+        // fall through to clipboard
       }
-    } else {
-      await navigator.clipboard.writeText(text);
-      alert("결과가 복사되었습니다!");
     }
+    await navigator.clipboard.writeText(text);
+    alert("결과가 복사되었습니다! 카톡에 붙여넣기 하세요.");
   };
 
   return (
@@ -45,6 +48,11 @@ export default function QuizResult({
         <p className="text-[15px] text-foreground/50">
           {totalQuestions}문제를 모두 맞혔습니다.
         </p>
+        {hadWrong && (
+          <p className="text-[13px] text-foreground/35 mt-2">
+            틀린 문제가 있었지만 다시 맞혔어요.
+          </p>
+        )}
       </div>
 
       {saveFailed && (
@@ -62,12 +70,21 @@ export default function QuizResult({
       )}
 
       <div className="space-y-3">
-        <button
-          onClick={handleShare}
-          className="w-full py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 transition-opacity"
-        >
-          결과 공유하기
-        </button>
+        {hadWrong ? (
+          <button
+            onClick={onRetryWrong}
+            className="w-full py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 transition-opacity"
+          >
+            틀린 문제 다시 풀기
+          </button>
+        ) : (
+          <button
+            onClick={handleShareKakao}
+            className="w-full py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 transition-opacity"
+          >
+            카톡에 자랑하기
+          </button>
+        )}
         <button
           onClick={onRetry}
           className="w-full py-3.5 rounded-lg text-[14px] text-foreground/40 hover:text-foreground transition-colors"

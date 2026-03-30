@@ -13,14 +13,17 @@ interface QuizQuestionProps {
   questionNumber: number;
   totalQuestions: number;
   onCorrect: () => void;
+  onWrong?: (questionId: string) => void;
 }
 
 function MultipleChoice({
   question,
   onCorrect,
+  onWrong,
 }: {
   question: MultipleChoiceQuestion;
   onCorrect: () => void;
+  onWrong?: () => void;
 }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [wrongIds, setWrongIds] = useState<Set<string>>(new Set());
@@ -37,6 +40,7 @@ function MultipleChoice({
     } else {
       setShakeId(id);
       setWrongIds((prev) => new Set(prev).add(id));
+      onWrong?.();
       setTimeout(() => {
         setShakeId(null);
         setSelected(null);
@@ -88,9 +92,11 @@ function MultipleChoice({
 function OXChoice({
   question,
   onCorrect,
+  onWrong,
 }: {
   question: OXQuestion;
   onCorrect: () => void;
+  onWrong?: () => void;
 }) {
   const [wrongValue, setWrongValue] = useState<boolean | null>(null);
   const [shaking, setShaking] = useState(false);
@@ -105,6 +111,7 @@ function OXChoice({
     } else {
       setWrongValue(answer);
       setShaking(true);
+      onWrong?.();
       setTimeout(() => setShaking(false), 600);
     }
   };
@@ -156,9 +163,11 @@ function OXChoice({
 function ShortAnswer({
   question,
   onCorrect,
+  onWrong,
 }: {
   question: ShortAnswerQuestion;
   onCorrect: () => void;
+  onWrong?: () => void;
 }) {
   const [value, setValue] = useState("");
   const [wrongAttempts, setWrongAttempts] = useState<string[]>([]);
@@ -180,6 +189,7 @@ function ShortAnswer({
     } else {
       setWrongAttempts((prev) => [...prev, value.trim()]);
       setShaking(true);
+      onWrong?.();
       setValue("");
       setTimeout(() => setShaking(false), 600);
     }
@@ -232,10 +242,12 @@ export default function QuizQuestionComponent({
   questionNumber,
   totalQuestions,
   onCorrect,
+  onWrong,
 }: QuizQuestionProps) {
+  const handleWrong = () => onWrong?.(question.id);
+
   return (
     <div className="w-full max-w-lg mx-auto animate-fade-in px-1">
-      {/* progress */}
       <div className="mb-8">
         <div className="flex items-end justify-between mb-3">
           <p className="text-[13px] text-foreground/40">
@@ -260,13 +272,13 @@ export default function QuizQuestionComponent({
       </h2>
 
       {question.type === "multiple-choice" && (
-        <MultipleChoice question={question} onCorrect={onCorrect} />
+        <MultipleChoice question={question} onCorrect={onCorrect} onWrong={handleWrong} />
       )}
       {question.type === "ox" && (
-        <OXChoice question={question} onCorrect={onCorrect} />
+        <OXChoice question={question} onCorrect={onCorrect} onWrong={handleWrong} />
       )}
       {question.type === "short-answer" && (
-        <ShortAnswer question={question} onCorrect={onCorrect} />
+        <ShortAnswer question={question} onCorrect={onCorrect} onWrong={handleWrong} />
       )}
     </div>
   );
