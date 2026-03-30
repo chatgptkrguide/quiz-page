@@ -75,6 +75,18 @@ export default function AdminDashboard({
     fetchResults();
   }, [fetchResults]);
 
+  // 관리자 페이지는 스크롤 허용
+  useEffect(() => {
+    document.body.style.position = "static";
+    document.body.style.overflow = "auto";
+    document.documentElement.style.overflow = "auto";
+    return () => {
+      document.body.style.position = "fixed";
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    };
+  }, []);
+
   const copyLink = async (slug: string) => {
     const url = `${window.location.origin}/${slug}`;
     await navigator.clipboard.writeText(url);
