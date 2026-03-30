@@ -22,6 +22,21 @@ export default function QuizResult({
   saveFailed,
   onRetrySave,
 }: QuizResultProps) {
+  const handleShare = async () => {
+    const text = `[${quiz.slug}] ${name}님이 ${totalQuestions}문제 전부 통과했습니다! 조모임 내용을 완벽하게 이해했어요.`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ text });
+        return;
+      } catch {
+        // fall through
+      }
+    }
+    await navigator.clipboard.writeText(text);
+    alert("복사되었습니다! 카톡에 붙여넣기 하세요.");
+  };
+
   return (
     <div className="w-full max-w-sm mx-auto animate-fade-in px-1">
       {hadWrong ? (
@@ -67,16 +82,23 @@ export default function QuizResult({
         </div>
       )}
 
-      {hadWrong && (
-        <div className="space-y-3">
+      <div className="space-y-3">
+        {hadWrong ? (
           <button
             onClick={onRetryWrong}
             className="w-full py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 transition-opacity"
           >
             틀린 문제 다시 풀기
           </button>
-        </div>
-      )}
+        ) : (
+          <button
+            onClick={handleShare}
+            className="w-full py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 transition-opacity"
+          >
+            카톡에 자랑하기
+          </button>
+        )}
+      </div>
     </div>
   );
 }
