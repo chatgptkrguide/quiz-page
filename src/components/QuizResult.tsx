@@ -7,6 +7,8 @@ interface QuizResultProps {
   name: string;
   totalQuestions: number;
   onRetry: () => void;
+  saveFailed?: boolean;
+  onRetrySave?: () => void;
 }
 
 export default function QuizResult({
@@ -14,6 +16,8 @@ export default function QuizResult({
   name,
   totalQuestions,
   onRetry,
+  saveFailed,
+  onRetrySave,
 }: QuizResultProps) {
   const handleShare = async () => {
     const text = `[${quiz.title}] ${name}님이 전 문제를 통과했습니다.\n${totalQuestions}문제 모두 정답\n\n나도 도전하기: ${window.location.href}`;
@@ -43,7 +47,21 @@ export default function QuizResult({
         </p>
       </div>
 
-      <div className="space-y-3 mt-8">
+      {saveFailed && (
+        <div className="mb-6 px-4 py-3 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-[13px] text-red-600 mb-2">
+            결과 저장에 실패했습니다.
+          </p>
+          <button
+            onClick={onRetrySave}
+            className="text-[13px] text-red-700 font-medium underline"
+          >
+            다시 시도
+          </button>
+        </div>
+      )}
+
+      <div className="space-y-3">
         <button
           onClick={handleShare}
           className="w-full py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 transition-opacity"

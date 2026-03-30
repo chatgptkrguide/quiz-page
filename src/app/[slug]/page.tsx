@@ -17,6 +17,10 @@ const faviconMap: Record<string, string> = {
   "식단하조": "/favicon-식단하조.png?v=2",
 };
 
+const ogImageMap: Record<string, string> = {
+  "식단하조": "/logo-식단하조.png",
+};
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -26,13 +30,28 @@ export async function generateMetadata({
 
   const decodedSlug = decodeURIComponent(slug);
   const favicon = faviconMap[decodedSlug];
+  const ogImage = ogImageMap[decodedSlug] ?? quiz.logo;
 
   return {
     title: quiz.title,
-    description: quiz.description,
+    description: quiz.description?.replace(/\n/g, " "),
     ...(favicon && {
       icons: { icon: favicon },
     }),
+    openGraph: {
+      title: quiz.title,
+      description: quiz.description?.replace(/\n/g, " "),
+      type: "website",
+      ...(ogImage && {
+        images: [{ url: ogImage, width: 1200, height: 630, alt: quiz.title }],
+      }),
+    },
+    twitter: {
+      card: ogImage ? "summary_large_image" : "summary",
+      title: quiz.title,
+      description: quiz.description?.replace(/\n/g, " "),
+      ...(ogImage && { images: [ogImage] }),
+    },
   };
 }
 
