@@ -18,7 +18,7 @@ const faviconMap: Record<string, string> = {
 };
 
 const ogImageMap: Record<string, string> = {
-  "식단하조": "/logo-식단하조.png",
+  "식단하조": "/og-식단하조.png",
 };
 
 export async function generateMetadata({
