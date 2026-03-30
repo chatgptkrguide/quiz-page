@@ -1,8 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
+import { timingSafeEqual } from "crypto";
 
+function safeCompare(a: string, b: string): boolean {
+  try {
+    const bufA = Buffer.from(a, "utf-8");
+    const bufB = Buffer.from(b, "utf-8");
+    if (bufA.length !== bufB.length) {
+      // 길이가 달라도 동일 시간 소요되도록 더미 비교
+      timingSafeEqual(bufA, bufA);
+      return false;
+    }
+    return timingSafeEqual(bufA, bufB);
+  } catch {
+    return false;
+  }
+}
+
+// serverless 환경에서도 동작하는 rate limit (짧은 수명이지만 없는 것보단 나음)
 const attempts = new Map<string, { count: number; lastAttempt: number }>();
 const MAX_ATTEMPTS = 5;
-const WINDOW_MS = 5 * 60 * 1000; // 5분
+const WINDOW_MS = 5 * 60 * 1000;
 
 function getClientIp(request: NextRequest): string {
   return (
@@ -21,17 +38,11 @@ function checkRateLimit(ip: string): boolean {
     return true;
   }
 
-  if (record.count >= MAX_ATTEMPTS) {
-    return false;
-  }
+  if (record.count >= MAX_ATTEMPTS) return false;
 
   record.count += 1;
   record.lastAttempt = now;
   return true;
-}
-
-function resetRateLimit(ip: string): void {
-  attempts.delete(ip);
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -50,25 +61,21 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (!adminPassword) {
       return NextResponse.json(
-        { error: "관리자 비밀번호가 설정되지 않았습니다" },
+        { error: "인증 실패" },
         { status: 500 }
       );
     }
 
-    // 타이밍 공격 방지: 항상 동일 시간 소요
-    const isCorrect =
-      password.length === adminPassword.length &&
-      password === adminPassword;
+    if (typeof password !== "string" || password.length > 100) {
+      return NextResponse.json({ error: "인증 실패" }, { status: 401 });
+    }
 
-    if (isCorrect) {
-      resetRateLimit(ip);
+    if (safeCompare(password, adminPassword)) {
+      attempts.delete(ip);
       return NextResponse.json({ success: true });
     }
 
-    return NextResponse.json(
-      { error: "비밀번호가 틀렸습니다" },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: "비밀번호가 틀렸습니다" }, { status: 401 });
   } catch {
     return NextResponse.json({ error: "인증 실패" }, { status: 500 });
   }
