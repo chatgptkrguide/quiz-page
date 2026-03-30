@@ -29,18 +29,20 @@ export default function NameInput({
     <div className="flex items-center justify-center px-1">
       <div className="w-full max-w-sm animate-fade-in">
         <div className="mb-10">
-          {quizLogo && (
+          {quizLogo ? (
             <Image
               src={quizLogo}
               alt={quizTitle}
-              width={48}
-              height={48}
-              className="mb-5 rounded-lg"
+              width={240}
+              height={80}
+              className="mb-4 h-auto w-auto max-w-[200px]"
+              priority
             />
+          ) : (
+            <h1 className="text-[22px] font-bold leading-snug mb-3">
+              {quizTitle}
+            </h1>
           )}
-          <h1 className="text-[22px] font-bold leading-snug mb-3">
-            {quizTitle}
-          </h1>
           <p className="text-[15px] text-foreground/60 leading-relaxed whitespace-pre-line">
             {quizDescription}
           </p>
