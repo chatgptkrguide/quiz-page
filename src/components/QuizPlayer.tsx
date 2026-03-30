@@ -150,10 +150,15 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
     if (currentIndex + 1 < activeQuestions.length) {
       setCurrentIndex((prev) => prev + 1);
     } else {
+      if (retryMode) {
+        // 재풀이 완료 → 틀린 기록 초기화
+        setWrongIds(new Set());
+        setRetryMode(false);
+      }
       saveResult();
       setPhase("result");
     }
-  }, [currentIndex, activeQuestions.length, saveResult]);
+  }, [currentIndex, activeQuestions.length, saveResult, retryMode]);
 
   const handleWrong = useCallback((questionId: string) => {
     setWrongIds((prev) => new Set(prev).add(questionId));
