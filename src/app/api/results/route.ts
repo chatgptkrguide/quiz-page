@@ -1,5 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { saveResult, getAllResults, getResultsBySlug } from "@/lib/storage";
+import {
+  saveResult,
+  getAllResults,
+  getResultsBySlug,
+  deleteResult,
+} from "@/lib/storage";
+
+function verifyAdmin(request: NextRequest): boolean {
+  const password = request.headers.get("x-admin-password");
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  return !!adminPassword && password === adminPassword;
+}
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -32,10 +43,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
-  const password = request.headers.get("x-admin-password");
-  const adminPassword = process.env.ADMIN_PASSWORD;
-
-  if (!adminPassword || password !== adminPassword) {
+  if (!verifyAdmin(request)) {
     return NextResponse.json({ error: "인증 실패" }, { status: 401 });
   }
 
@@ -49,6 +57,39 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   } catch {
     return NextResponse.json(
       { error: "결과 조회에 실패했습니다" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest): Promise<NextResponse> {
+  if (!verifyAdmin(request)) {
+    return NextResponse.json({ error: "인증 실패" }, { status: 401 });
+  }
+
+  try {
+    const { slug, id } = await request.json();
+
+    if (!slug || !id) {
+      return NextResponse.json(
+        { error: "slug와 id가 필요합니다" },
+        { status: 400 }
+      );
+    }
+
+    const deleted = await deleteResult(slug, id);
+
+    if (!deleted) {
+      return NextResponse.json(
+        { error: "결과를 찾을 수 없습니다" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ success: true });
+  } catch {
+    return NextResponse.json(
+      { error: "삭제에 실패했습니다" },
       { status: 500 }
     );
   }

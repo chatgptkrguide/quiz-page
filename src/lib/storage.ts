@@ -1,4 +1,4 @@
-import { list, put } from "@vercel/blob";
+import { list, put, del } from "@vercel/blob";
 
 export interface QuizResultRecord {
   id: string;
@@ -81,4 +81,16 @@ export async function getAllResults(): Promise<QuizResultRecord[]> {
     (a, b) =>
       new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
   );
+}
+
+export async function deleteResult(slug: string, id: string): Promise<boolean> {
+  const { blobs } = await list({
+    prefix: `${RESULTS_PREFIX}${slug}/`,
+  });
+
+  const target = blobs.find((b) => b.pathname.includes(id));
+  if (!target) return false;
+
+  await del(target.url);
+  return true;
 }

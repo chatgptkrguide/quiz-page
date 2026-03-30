@@ -27,6 +27,29 @@ export default function AdminDashboard({
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
+
+  const deleteResult = async (id: string, slug: string) => {
+    if (!confirm("이 결과를 삭제하시겠습니까?")) return;
+    setDeleting(id);
+    try {
+      const res = await fetch("/api/results", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password,
+        },
+        body: JSON.stringify({ slug, id }),
+      });
+      if (res.ok) {
+        setResults((prev) => prev.filter((r) => r.id !== id));
+      }
+    } catch {
+      // silent
+    } finally {
+      setDeleting(null);
+    }
+  };
 
   const fetchResults = useCallback(async () => {
     setLoading(true);
@@ -190,6 +213,13 @@ export default function AdminDashboard({
                     <span>{r.slug}</span>
                     <span>{r.score}/{r.totalQuestions}문제</span>
                     <span className="ml-auto">{formatDate(r.submittedAt)}</span>
+                    <button
+                      onClick={() => deleteResult(r.id, r.slug)}
+                      disabled={deleting === r.id}
+                      className="text-red-400 hover:text-red-600 transition-colors disabled:opacity-30"
+                    >
+                      {deleting === r.id ? "..." : "삭제"}
+                    </button>
                   </div>
                 </div>
               ))}
