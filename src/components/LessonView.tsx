@@ -49,10 +49,10 @@ export default function LessonView({
                 {lesson.title}
               </h2>
 
-              <div className="text-[15px] text-foreground/65 leading-[1.75] whitespace-pre-line">
+              <div className="text-[15px] text-foreground/55 leading-[1.75] whitespace-pre-line">
                 {lesson.content.split(/(\*\*[^*]+\*\*)/).map((part, i) =>
                   part.startsWith('**') && part.endsWith('**') ? (
-                    <strong key={i} className="text-foreground font-semibold">
+                    <strong key={i} className="text-foreground/90 font-bold">
                       {part.slice(2, -2)}
                     </strong>
                   ) : (
@@ -62,8 +62,8 @@ export default function LessonView({
               </div>
 
               {lesson.highlight && (
-                <div className="px-4 py-3 bg-accent/8 border-l-[3px] border-accent rounded-r-md mt-5">
-                  <p className="text-[13px] font-semibold text-accent leading-relaxed">
+                <div className="px-4 py-3.5 bg-accent/8 border-l-[3px] border-accent rounded-r-md mt-5">
+                  <p className="text-[14px] font-bold text-accent leading-relaxed">
                     {lesson.highlight}
                   </p>
                 </div>
