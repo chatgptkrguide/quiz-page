@@ -23,7 +23,7 @@ export default function QuizResult({
   onRetrySave,
 }: QuizResultProps) {
   const handleShare = async () => {
-    const text = `[${quiz.slug}] ${name}님이 ${totalQuestions}문제 전부 통과했습니다! 조모임 내용을 완벽하게 이해했어요.`;
+    const text = `🎉 ${quiz.slug} 퀴즈 전부 통과! 🎉\n\n${name}님이 ${totalQuestions}문제를\n모두 맞혔습니다 ✅\n\n조모임 내용 완벽 이해 👏\n다들 축하해주세요~ 🥳`;
 
     if (navigator.share) {
       try {
