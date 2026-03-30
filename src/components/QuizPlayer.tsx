@@ -207,29 +207,22 @@ export default function QuizPlayer({ quiz }: QuizPlayerProps) {
 
   return (
     <div data-theme={quiz.theme} className="h-[100dvh] flex flex-col overflow-hidden bg-background text-foreground">
-      <header className="py-3 px-6 border-b border-border/40 shrink-0">
+      <header className="py-3 px-4 border-b border-border/40 shrink-0">
         <div className="flex items-center justify-between">
           {phase === "quiz" && hasLessons ? (
             <button
               onClick={handleBackToLesson}
-              className="text-[12px] text-foreground/35 hover:text-foreground/60 transition-colors"
+              className="text-[11px] text-foreground/35 hover:text-foreground/60 transition-colors shrink-0"
             >
-              설명 다시 보기
+              설명 보기
             </button>
           ) : (
-            <div />
+            <div className="w-12" />
           )}
-          <div className="flex items-center gap-2">
-            <p className="text-[13px] text-foreground/50">
-              {quiz.title}
-            </p>
-            {phase === "quiz" && (
-              <span className="text-[11px] text-accent bg-accent/10 px-2 py-0.5 rounded font-medium">
-                {retryMode ? "재풀이" : "퀴즈"}
-              </span>
-            )}
-          </div>
-          <div className="w-[80px]" />
+          <p className="text-[13px] text-foreground/50 text-center truncate px-2">
+            {retryMode ? "틀린 문제 재풀이" : quiz.title}
+          </p>
+          <div className="w-12" />
         </div>
       </header>
 

@@ -66,7 +66,7 @@ function MultipleChoice({
             key={option.id}
             onClick={() => handleSelect(option.id)}
             disabled={solved || isWrong}
-            className={`animate-slide-up animate-delay-${(i + 1) * 100} w-full text-left px-5 py-4 rounded-lg border-2 transition-all ${style} ${isShaking ? "animate-shake" : ""} disabled:cursor-default`}
+            className={`w-full text-left px-5 py-4 rounded-lg border-2 transition-all ${style} ${isShaking ? "animate-shake" : ""} disabled:cursor-default`}
           >
             <span className="text-[15px] leading-relaxed">{option.text}</span>
           </button>
@@ -131,7 +131,7 @@ function OXChoice({
         <button
           onClick={() => handleSelect(true)}
           disabled={solved || wrongValue === true}
-          className={`animate-slide-up animate-delay-100 py-6 rounded-lg border-2 transition-all text-center ${getStyle(true)} ${shaking && wrongValue === true ? "animate-shake" : ""} disabled:cursor-default`}
+          className={`py-6 rounded-lg border-2 transition-all text-center ${getStyle(true)} ${shaking && wrongValue === true ? "animate-shake" : ""} disabled:cursor-default`}
         >
           <span className="text-2xl font-bold block mb-1">O</span>
           <span className="text-[13px]">맞다</span>
@@ -139,7 +139,7 @@ function OXChoice({
         <button
           onClick={() => handleSelect(false)}
           disabled={solved || wrongValue === false}
-          className={`animate-slide-up animate-delay-200 py-6 rounded-lg border-2 transition-all text-center ${getStyle(false)} ${shaking && wrongValue === false ? "animate-shake" : ""} disabled:cursor-default`}
+          className={`py-6 rounded-lg border-2 transition-all text-center ${getStyle(false)} ${shaking && wrongValue === false ? "animate-shake" : ""} disabled:cursor-default`}
         >
           <span className="text-2xl font-bold block mb-1">X</span>
           <span className="text-[13px]">틀리다</span>
@@ -196,7 +196,7 @@ function ShortAnswer({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
-      <div className={`animate-slide-up animate-delay-100 ${shaking ? "animate-shake" : ""}`}>
+      <div className={`${shaking ? "animate-shake" : ""}`}>
         <input
           type="text"
           value={value}
@@ -220,7 +220,7 @@ function ShortAnswer({
         <button
           type="submit"
           disabled={!value.trim()}
-          className="animate-slide-up animate-delay-200 w-full py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 disabled:opacity-20 disabled:cursor-not-allowed transition-opacity"
+          className="w-full py-3.5 rounded-lg bg-foreground text-background text-[15px] font-medium hover:opacity-90 disabled:opacity-20 disabled:cursor-not-allowed transition-opacity"
         >
           제출
         </button>
