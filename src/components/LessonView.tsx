@@ -51,19 +51,19 @@ export default function LessonView({
               </h2>
 
               {lesson.image && (
-                <figure className="mb-5 rounded-lg overflow-hidden border border-border/40 bg-muted/30">
-                  <div className="relative w-full" style={{ aspectRatio: "9 / 16" }}>
+                <figure className="mb-4 rounded-lg overflow-hidden border border-border/40 bg-muted/30">
+                  <div className="relative w-full h-[34dvh] max-h-[320px] min-h-[200px]">
                     <Image
                       src={lesson.image.src}
                       alt={lesson.image.alt}
                       fill
                       sizes="(max-width: 640px) 100vw, 384px"
                       className="object-contain"
-                      priority={current === 0}
+                      priority
                     />
                   </div>
                   {lesson.image.caption && (
-                    <figcaption className="px-3 py-2 text-[12px] text-foreground/50 text-center border-t border-border/30">
+                    <figcaption className="px-3 py-2 text-[11px] text-foreground/50 text-center border-t border-border/30">
                       {lesson.image.caption}
                     </figcaption>
                   )}
