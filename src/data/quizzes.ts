@@ -203,8 +203,8 @@ export const quizzes: Quiz[] = [
         id: "use-l3",
         title: "② 리포트 — 주간 달성 & 벌금",
         content:
-          "리포트 탭에는 **3개의 서브탭**이 있어요.\n\n**일간 / 주간 / 누적벌금**\n\n주간 탭에서는 **이번 주 총 벌금**과\n멤버별 **요일별 달성 상태**를 확인합니다.\n\n각 칸의 표시 의미\n· **O** — 목표 달성\n· **△** — 미달성\n· **X** — 미기록\n· **★** — 특별일\n\n미기록이면 **2,000원/일**,\n미달성이 **주 3회 이상**이면 **2,000원/회**\n벌금이 부과됩니다.",
-        highlight: "O / △ / X / ★ 표시 + 주간 벌금 자동 집계",
+          "리포트 탭에는 **3개의 서브탭**이 있어요.\n\n**일간 / 주간 / 누적벌금**\n\n주간 탭에서는 **이번 주 총 벌금**과\n멤버별 **요일별 달성 상태**를 확인합니다.\n\n각 칸의 표시 의미\n· **O** — 목표 달성\n· **!** — 미달성\n· **X** — 미기록\n· **P** — 특별일 (pass, 자동 통과)\n\n미기록이면 **2,000원/일**,\n미달성이 **주 3회 이상**이면 **2,000원/회**\n벌금이 부과됩니다.",
+        highlight: "O / ! / X / P 표시 + 주간 벌금 자동 집계",
         image: {
           src: "/guide/02-report.png",
           alt: "식단하조 리포트 화면 — 주간 달성 현황과 벌금 표시",
@@ -281,7 +281,20 @@ export const quizzes: Quiz[] = [
           { id: "d", text: "미달성" },
         ],
         correctAnswer: "c",
-        explanation: "O는 목표 달성, △는 미달성, X는 미기록, ★는 특별일이에요.",
+        explanation: "O는 목표 달성, !는 미달성, X는 미기록, P는 특별일(pass)이에요.",
+      },
+      {
+        id: "use-q3b",
+        type: "multiple-choice",
+        question: "주간 리포트의 'P' 표시가 의미하는 것은?",
+        options: [
+          { id: "a", text: "벌금(Penalty)" },
+          { id: "b", text: "특별일 — 자동 통과(pass)" },
+          { id: "c", text: "단백질(Protein) 달성" },
+          { id: "d", text: "모임 대기(Pending)" },
+        ],
+        correctAnswer: "b",
+        explanation: "P는 특별일(pass) — 조장이 지정한 자동 통과일이라 벌금이 면제돼요.",
       },
       {
         id: "use-q4",
@@ -340,7 +353,7 @@ export const quizzes: Quiz[] = [
     results: [
       { minScore: 0, maxScore: 3, title: "사이트 입문", description: "한번 더 둘러봐요!" },
       { minScore: 4, maxScore: 6, title: "사이트 활용러", description: "거의 다 파악했어요!" },
-      { minScore: 7, maxScore: 8, title: "사이트 마스터", description: "완벽하게 쓸 수 있어요!" },
+      { minScore: 7, maxScore: 9, title: "사이트 마스터", description: "완벽하게 쓸 수 있어요!" },
     ],
   },
   {

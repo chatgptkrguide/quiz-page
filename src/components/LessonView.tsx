@@ -52,7 +52,7 @@ export default function LessonView({
 
               {lesson.image && (
                 <figure className="mb-4 rounded-lg overflow-hidden border border-border/40 bg-muted/30">
-                  <div className="relative w-full h-[34dvh] max-h-[320px] min-h-[200px]">
+                  <div className="relative w-full h-[44dvh] max-h-[420px] min-h-[260px]">
                     <Image
                       src={lesson.image.src}
                       alt={lesson.image.alt}
@@ -60,6 +60,7 @@ export default function LessonView({
                       sizes="(max-width: 640px) 100vw, 384px"
                       className="object-contain"
                       priority
+                      quality={95}
                     />
                   </div>
                   {lesson.image.caption && (
