@@ -32,6 +32,11 @@ export interface LessonSection {
   title: string;
   content: string;
   highlight?: string;
+  image?: {
+    src: string;
+    alt: string;
+    caption?: string;
+  };
 }
 
 export interface QuizResult {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { LessonSection } from "@/types/quiz";
 
 interface LessonViewProps {
@@ -48,6 +49,26 @@ export default function LessonView({
               <h2 className="text-[20px] font-bold leading-tight mb-4">
                 {lesson.title}
               </h2>
+
+              {lesson.image && (
+                <figure className="mb-5 rounded-lg overflow-hidden border border-border/40 bg-muted/30">
+                  <div className="relative w-full" style={{ aspectRatio: "9 / 16" }}>
+                    <Image
+                      src={lesson.image.src}
+                      alt={lesson.image.alt}
+                      fill
+                      sizes="(max-width: 640px) 100vw, 384px"
+                      className="object-contain"
+                      priority={current === 0}
+                    />
+                  </div>
+                  {lesson.image.caption && (
+                    <figcaption className="px-3 py-2 text-[12px] text-foreground/50 text-center border-t border-border/30">
+                      {lesson.image.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              )}
 
               <div className="text-[15px] text-foreground/55 leading-[1.75] whitespace-pre-line">
                 {lesson.content.split(/(\*\*[^*]+\*\*)/).map((part, i) =>
