@@ -208,7 +208,7 @@ export const quizzes: Quiz[] = [
         image: {
           src: "/guide/02-report.png",
           alt: "식단하조 리포트 화면 — 주간 달성 현황과 벌금 표시",
-          caption: "리포트 탭: 요일별 O/△/X/★로 한눈에 달성 여부 확인",
+          caption: "리포트 탭: 요일별 O / ! / X / P로 한눈에 달성 여부 확인",
         },
       },
       {

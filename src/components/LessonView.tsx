@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { LessonSection } from "@/types/quiz";
+
+interface EnlargedImage {
+  src: string;
+  alt: string;
+}
 
 interface LessonViewProps {
   lessons: LessonSection[];
@@ -17,11 +22,25 @@ export default function LessonView({
   onStartQuiz,
 }: LessonViewProps) {
   const [current, setCurrent] = useState(0);
+  const [enlarged, setEnlarged] = useState<EnlargedImage | null>(null);
   const isLast = current >= lessons.length;
   const lesson = lessons[current];
 
-  const handleNext = () => setCurrent((prev) => prev + 1);
-  const handlePrev = () => setCurrent((prev) => Math.max(0, prev - 1));
+  const handleNext = (): void => setCurrent((prev) => prev + 1);
+  const handlePrev = (): void => setCurrent((prev) => Math.max(0, prev - 1));
+
+  useEffect(() => {
+    if (!enlarged) return;
+    const onKey = (e: KeyboardEvent): void => {
+      if (e.key === "Escape") setEnlarged(null);
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [enlarged]);
 
   const progress = isLast
     ? 100
@@ -52,7 +71,15 @@ export default function LessonView({
 
               {lesson.image && (
                 <figure className="mb-4 rounded-lg overflow-hidden border border-border/40 bg-muted/30">
-                  <div className="relative w-full h-[44dvh] max-h-[420px] min-h-[260px]">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      lesson.image &&
+                      setEnlarged({ src: lesson.image.src, alt: lesson.image.alt })
+                    }
+                    className="relative block w-full h-[44dvh] max-h-[420px] min-h-[260px] cursor-zoom-in"
+                    aria-label="이미지 크게 보기"
+                  >
                     <Image
                       src={lesson.image.src}
                       alt={lesson.image.alt}
@@ -62,7 +89,10 @@ export default function LessonView({
                       priority
                       quality={95}
                     />
-                  </div>
+                    <span className="absolute top-2 right-2 px-2 py-1 rounded-md bg-foreground/70 text-background text-[10px] font-medium pointer-events-none">
+                      🔍 탭해서 크게
+                    </span>
+                  </button>
                   {lesson.image.caption && (
                     <figcaption className="px-3 py-2 text-[11px] text-foreground/50 text-center border-t border-border/30">
                       {lesson.image.caption}
@@ -111,6 +141,42 @@ export default function LessonView({
           )}
         </div>
       </div>
+
+      {/* enlarged image modal */}
+      {enlarged && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="확대된 이미지"
+          onClick={() => setEnlarged(null)}
+          className="fixed inset-0 z-50 bg-black/92 flex items-center justify-center p-3 animate-fade-in"
+        >
+          <div className="relative w-full h-full max-w-3xl">
+            <Image
+              src={enlarged.src}
+              alt={enlarged.alt}
+              fill
+              sizes="100vw"
+              className="object-contain"
+              quality={100}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setEnlarged(null);
+            }}
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 text-white text-xl flex items-center justify-center"
+            aria-label="닫기"
+          >
+            ✕
+          </button>
+          <p className="absolute bottom-4 left-0 right-0 text-center text-white/60 text-[12px]">
+            아무 곳이나 탭하면 닫힙니다
+          </p>
+        </div>
+      )}
 
       {/* fixed bottom nav */}
       <div className="shrink-0 px-5 pb-6 pt-3 border-t border-border/30">
