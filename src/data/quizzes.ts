@@ -2,7 +2,7 @@ import { Quiz } from "@/types/quiz";
 
 export const quizzes: Quiz[] = [
   {
-    slug: "식단하조",
+    slug: "식단하조-소개",
     title: "식단하조 조모임 상세 설명",
     description:
       "먹는 걸 기록하면, 몸이 달라진다.\n설명을 읽고 퀴즈로 확인해보세요.",
