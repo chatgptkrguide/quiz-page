@@ -8,7 +8,12 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-const HUB_SLUGS = ["식단하조"] as const;
+// "sikdan" 은 영문 별칭 — 카톡 등에서 한글 주소는 링크가 도메인까지만 잡혀 관리자 화면(/)으로 가는 일이 있다.
+const HUB_SLUGS = ["식단하조", "sikdan"] as const;
+
+function isHub(slug: string): boolean {
+  return (HUB_SLUGS as readonly string[]).includes(slug);
+}
 
 export async function generateStaticParams() {
   return [
@@ -31,7 +36,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
 
-  if (decodedSlug === "식단하조") {
+  if (isHub(decodedSlug)) {
     return {
       title: "식단하조 — 조모임 소개 & 웹사이트 사용법",
       description:
@@ -93,7 +98,7 @@ export default async function QuizPage({ params }: PageProps) {
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
 
-  if (decodedSlug === "식단하조") {
+  if (isHub(decodedSlug)) {
     return <SikdanHajoHub />;
   }
 
