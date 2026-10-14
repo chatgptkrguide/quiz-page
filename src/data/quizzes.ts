@@ -522,6 +522,13 @@ export const quizzes: Quiz[] = [
         highlight: "칼로리(상한·하한) · 단백질 · 간식 횟수",
       },
       {
+        id: "goal-l10b",
+        title: "🧮 내 숫자 1분 만에 정하기",
+        content:
+          "계산이 어렵다면 이렇게만 하세요.\n\n**① 칼로리**\n사이트 **목표 탭 → BMR 계산기**에\n성별 · 나이 · 키 · 몸무게를 넣고 활동량을 고르면\n**'다이어트 목표별 칼로리'**가 나와요.\n그중 **완만한 감량** 줄 숫자를 그대로 써요.\n(체중 유지가 목표면 **체중 유지** 숫자 이하)\n\n**② 단백질**\n**체중 × 1.0g** (근력 운동을 하면 × 1.6g)\n\n예) 완만한 감량 1,700 ~ 1,800 · 체중 60kg\n→ **코가야 목표 1700~1800kcal 단백질 60g**",
+        highlight: "BMR 계산기 '완만한 감량' 숫자 + 체중 × 1.0g",
+      },
+      {
         id: "goal-l11",
         title: "🎯 코가에게 목표 보내기",
         content:
@@ -651,7 +658,8 @@ export const quizzes: Quiz[] = [
       { minScore: 9, maxScore: 10, title: "목표 마스터", description: "이제 코가에게 목표를 보내 주세요!" },
     ],
     resultNote:
-      "이제 **톡방에서 코가에게** 내 목표를 보내 주세요.\n\n**코가야 목표 1500~1800kcal 단백질 100g**\n\n숫자는 내 기준으로 바꿔서 보내고,\n**코가야 내 목표**로 저장됐는지 확인하세요.",
+      "이제 **톡방에서 코가에게** 내 목표를 보내 주세요.\n\n**코가야 목표 1500~1800kcal 단백질 100g**\n\n숫자는 **BMR 계산기의 '완만한 감량'** 줄과\n**체중 × 1.0g**으로 바꿔서 보내고,\n**코가야 내 목표**로 저장됐는지 확인하세요.",
+    resultLink: { href: "https://sikdan-hajo.vercel.app/bmr", label: "BMR 계산기 열기" },
   },
   {
     slug: "AI써보조",
@@ -1078,6 +1086,13 @@ export const quizzes: Quiz[] = [
   },
 ];
 
+// 영문 별칭 → 퀴즈 slug. 카톡에서는 한글 주소가 링크로 끝까지 잡히지 않을 때가 있다 (허브의 /sikdan 과 같은 이유).
+export const SLUG_ALIASES: Record<string, string> = {
+  "sikdan-goal": "식단하조-목표설정",
+};
+
 export function getQuizBySlug(slug: string): Quiz | undefined {
-  return quizzes.find((q) => q.slug === decodeURIComponent(slug));
+  const decoded = decodeURIComponent(slug);
+  const target = SLUG_ALIASES[decoded] ?? decoded;
+  return quizzes.find((q) => q.slug === target);
 }

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { quizzes, getQuizBySlug } from "@/data/quizzes";
+import { quizzes, getQuizBySlug, SLUG_ALIASES } from "@/data/quizzes";
 import QuizPlayer from "@/components/QuizPlayer";
 import SikdanHajoHub from "@/components/SikdanHajoHub";
 
@@ -18,6 +18,7 @@ function isHub(slug: string): boolean {
 export async function generateStaticParams() {
   return [
     ...quizzes.map((quiz) => ({ slug: quiz.slug })),
+    ...Object.keys(SLUG_ALIASES).map((slug) => ({ slug })),
     ...HUB_SLUGS.map((slug) => ({ slug })),
   ];
 }

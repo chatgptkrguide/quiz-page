@@ -57,15 +57,18 @@ export default function QuizResult({
           <h2 className="text-[22px] font-bold mb-5">
             <span className="accent-underline">{totalQuestions}문제 전부 통과!</span>
           </h2>
-          <p className="text-[15px] text-foreground/60 leading-relaxed">
-            {quiz.slug} 조모임 내용을
-            <br />
-            완벽하게 이해하셨네요.
-          </p>
+          {/* 다음 할 일이 있는 퀴즈는 아래 안내가 그 자리를 대신한다 */}
           {!quiz.resultNote && (
-            <p className="text-[14px] text-foreground/40 mt-4">
-              조모임에서 만나요!
-            </p>
+            <>
+              <p className="text-[15px] text-foreground/60 leading-relaxed">
+                {quiz.slug} 조모임 내용을
+                <br />
+                완벽하게 이해하셨네요.
+              </p>
+              <p className="text-[14px] text-foreground/40 mt-4">
+                조모임에서 만나요!
+              </p>
+            </>
           )}
         </div>
       )}
@@ -115,6 +118,16 @@ export default function QuizResult({
           >
             카톡에 자랑하기
           </button>
+        )}
+        {quiz.resultLink && (
+          <a
+            href={quiz.resultLink.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full py-3.5 rounded-lg border-2 border-border text-foreground text-center text-[15px] font-medium hover:bg-foreground/5 transition-colors"
+          >
+            {quiz.resultLink.label}
+          </a>
         )}
       </div>
     </div>

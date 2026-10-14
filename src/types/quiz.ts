@@ -57,6 +57,8 @@ export interface Quiz {
   results: QuizResult[];
   /** 다 푼 뒤 결과 화면에 보여 줄 다음 할 일. **굵게** 표기 가능 */
   resultNote?: string;
+  /** 다음 할 일에 필요한 페이지 (결과 화면의 보조 버튼) */
+  resultLink?: { href: string; label: string };
 }
 
 export interface QuizAttempt {
