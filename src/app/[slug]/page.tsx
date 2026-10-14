@@ -38,14 +38,14 @@ export async function generateMetadata({
 
   if (isHub(decodedSlug)) {
     return {
-      title: "식단하조 — 조모임 소개 & 웹사이트 사용법",
+      title: "식단하조 — 조모임 소개 · 웹사이트 사용법 · 목표 정하기",
       description:
-        "식단하조 활동의 기본 이해와 웹사이트 사용법을 퀴즈로 확인해보세요.",
+        "식단하조 활동의 기본 이해와 웹사이트 사용법, 나만의 목표 정하기를 퀴즈로 확인해보세요.",
       icons: { icon: faviconMap["식단하조"] },
       openGraph: {
         title: "식단하조 가이드",
         description:
-          "조모임 소개 + 웹사이트 사용법 — 원하는 퀴즈를 골라서 시작해요",
+          "조모임 소개 + 웹사이트 사용법 + 목표 정하기 — 원하는 퀴즈를 골라서 시작해요",
         type: "website",
         images: [
           {
@@ -59,7 +59,7 @@ export async function generateMetadata({
       twitter: {
         card: "summary_large_image",
         title: "식단하조 가이드",
-        description: "조모임 소개 + 웹사이트 사용법",
+        description: "조모임 소개 + 웹사이트 사용법 + 목표 정하기",
         images: [ogImageMap["식단하조"]],
       },
     };

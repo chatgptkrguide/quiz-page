@@ -55,6 +55,8 @@ export interface Quiz {
   lessons: LessonSection[];
   questions: QuizQuestion[];
   results: QuizResult[];
+  /** 다 푼 뒤 결과 화면에 보여 줄 다음 할 일. **굵게** 표기 가능 */
+  resultNote?: string;
 }
 
 export interface QuizAttempt {

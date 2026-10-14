@@ -62,8 +62,26 @@ export default function QuizResult({
             <br />
             완벽하게 이해하셨네요.
           </p>
-          <p className="text-[14px] text-foreground/40 mt-4">
-            조모임에서 만나요!
+          {!quiz.resultNote && (
+            <p className="text-[14px] text-foreground/40 mt-4">
+              조모임에서 만나요!
+            </p>
+          )}
+        </div>
+      )}
+
+      {quiz.resultNote && (
+        <div className="mb-8 px-4 py-4 bg-accent/8 border-l-[3px] border-accent rounded-r-md">
+          <p className="text-[14px] text-foreground/70 leading-relaxed whitespace-pre-line">
+            {quiz.resultNote.split(/(\*\*[^*]+\*\*)/).map((part, i) =>
+              part.startsWith("**") && part.endsWith("**") ? (
+                <strong key={i} className="text-foreground font-bold">
+                  {part.slice(2, -2)}
+                </strong>
+              ) : (
+                <span key={i}>{part}</span>
+              )
+            )}
           </p>
         </div>
       )}

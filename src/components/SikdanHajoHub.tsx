@@ -8,6 +8,7 @@ interface HubButton {
 const BUTTONS: HubButton[] = [
   { href: "/식단하조-소개", label: "조모임 소개" },
   { href: "/식단하조-사용법", label: "사이트 사용법" },
+  { href: "/식단하조-목표설정", label: "나만의 목표 정하기" },
 ];
 
 export default function SikdanHajoHub(): React.ReactElement {
